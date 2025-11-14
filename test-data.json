@@ -1,0 +1,121 @@
+{
+    "orderId": 1,
+    "name": "New Checklist",
+    "description": "Checklist description",
+    "questions": [
+        {
+            "questionText": "What is your name",
+            "type": "text",
+            "options": [],
+            "required": true
+        },
+        {
+            "questionText": "Are you working remotely?",
+            "type": "radio",
+            "options": [
+                "yes",
+                "no"
+            ],
+            "required": true
+        },
+        {
+            "questionText": "Select your favorite fruits",
+            "type": "dropdown",
+            "options": [
+                "Apple",
+                "Banana",
+                "Orange",
+                "Grapes"
+            ],
+            "required": false
+        },
+        {
+            "questionText": "Provide additional comments",
+            "type": "textarea",
+            "options": [],
+            "required": false
+        },
+        {
+            "questionText": "How many years of experience do you have?",
+            "type": "number",
+            "options": [],
+            "required": true
+        },
+        {
+            "questionText": "Choose your preferred programming languages",
+            "type": "checkbox",
+            "options": [
+                "JavaScript",
+                "Python",
+                "Java",
+                "C#"
+            ],
+            "required": false
+        },
+        {
+            "questionText": "Upload your resume",
+            "type": "file",
+            "options": [],
+            "required": true
+        },
+        {
+            "questionText": "Select your appointment date and time",
+            "type": "datetime",
+            "options": [],
+            "required": false
+        },
+        {
+            "questionText": "Select your birth date",
+            "type": "date",
+            "options": [],
+            "required": true
+        }
+    ]
+}
+
+
+
+
+
+
+{
+  "orderId": 1,
+  "responses": [
+    {
+      "questionId": 1,
+      "answers": ""
+    },
+    {
+      "questionId": 2,
+      "answers": "yes"
+    },
+    {
+      "questionId": 3,
+      "answers": "Apple,Orange"
+    },
+    {
+      "questionId": 4,
+      "answers": "No comments"
+    },
+    {
+      "questionId": 5,
+      "answers": "5"
+    },
+    {
+      "questionId": 6,
+      "answers": "JavaScript,Python"
+    },
+    {
+      "questionId": 7,
+      "answers": "dd"
+    },
+    {
+      "questionId": 8,
+      "answers": "2024-06-15 10:30:00"
+    },
+    {
+      "questionId": 9,
+      "answers": "1990-01-01"
+    }
+  ]
+}
