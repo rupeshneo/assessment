@@ -1,133 +1,160 @@
-const { isNumber } = require("../helpers/helper");
-const { Answer, Checklist, ChecklistQuestion, Order } = require("../models");
+const { deleteFiles } = require("../helpers/helper");
+const { Answer, Checklist, ChecklistQuestion, FileUpload, Order, sequelize } = require("../models");
 const logger = require("../utils/logger");
 
 exports.submitAnswer = async (req, res) => {
-  let t;
-  try {
-    const { orderId, responses, ...files } = req.body;
-    console.log(files);
-    const order = await Order.findOne({ where: { id: orderId } });
-    const checklist = await Checklist.findOne({
-      where: { orderId: orderId },
-      include: [
-        {
-          model: ChecklistQuestion,
-          as: "questions",
-        },
-      ],
-    });
-    let answer = await Answer.findOne({ where: { orderId: orderId } });
+  let transaction;
 
-    if (order === null) {
+  try {
+    const { orderId, responses } = req.body;
+    const parsedResponses = JSON.parse(responses || "[]");
+
+    // Validate order
+    const order = await Order.findOne({ where: { id: orderId } });
+    if (!order) {
       return res.status(400).json({ message: "Invalid orderId" });
     }
 
-    const questions = checklist.questions;
+    const checklist = await Checklist.findOne({
+      where: { orderId },
+      include: [{ model: ChecklistQuestion, as: "questions" }],
+    });
 
-    for (const question of questions) {
-      const response = responses.find(
+    if (!checklist || !checklist.questions?.length) {
+      return res.status(400).json({ message: "Checklist not found" });
+    }
+
+    const questionIds = checklist.questions.map((q) => q.id);
+    const validResponses = parsedResponses.filter((r) =>
+      questionIds.includes(r.questionId)
+    );
+
+    // ---------------- VALIDATION LOOP ----------------
+    for (const question of checklist.questions) {
+      const userResponse = validResponses.find(
         (resp) => resp.questionId === question.id
       );
 
-      if (question.required && !response?.answers) {
-        throw new Error(`Answer required for question ID ${question.id}`);
-      } else {
-        continue;
-      }
-    }
+      const options = JSON.parse(question.options || "[]").map((o) => o.trim());
+      const answerArr = userResponse?.answers
+        ? userResponse.answers.split(",").map((a) => a.trim())
+        : [];
 
-    for (const response of responses) {
-      const question = questions.find((q) => q.id === response.questionId);      
-      let options = JSON.parse(question?.options);
-      options = options.length ? options.map(opt => opt.trim()) : []
-      const answers = response.answers.split(",");      
-      if (!question) {
-        throw new Error(
-          `Question ID ${response.questionId} not found in checklist.`
-        );
+      // Required validations
+      if (question.required) {
+        if (!userResponse?.answers && question.type !== "file") {
+          throw new Error(`Answer required for question ${question.id}`);
+        }
+
+        if (question.type === "file") {
+          const filePresent = req.files?.some(
+            (f) => f.fieldname === `question_${question.id}`
+          );
+          if (!filePresent) {
+            throw new Error(`File required for question ${question.id}`);
+          }
+        }
       }
+
+      // Type validatons
       switch (question.type) {
         case "radio":
-        case "dropdown":
         case "checkbox":
-          for (const ans of answers) {
-            if (!options.includes(ans.trim())) {
+        case "dropdown":
+          for (const ans of answerArr) {
+            if (!options.includes(ans)) {
               throw new Error(
-                `Invalid answer option for question ID ${question.id}`
+                `Invalid option "${ans}" for question ${question.id}`
               );
             }
           }
           break;
+
         case "number":
-          if (!isNumber(answers[0])) {
-            throw new Error(
-              `Invalid answer type for question ID ${question.id}: expected number.`
-            );
+          if (answerArr[0] && isNaN(answerArr[0])) {
+            throw new Error(`Expected number for question ${question.id}`);
           }
           break;
-        case "file":
-          // File validation can be added here if needed
-          break;
+
         case "date":
-          if (answers[0] && isNaN(Date.parse(answers[0]))) {
-            throw new Error(
-              `Invalid answers[0]wer type for question ID ${question.id}: expected date string.`
-            );
-          }
-          break;
         case "datetime":
-          if (answers[0] && isNaN(Date.parse(answers[0]))) {
-            throw new Error(
-              `Invalid answer type for question ID ${question.id}: expected datetime string.`
-            );
+          if (answerArr[0] && isNaN(Date.parse(answerArr[0]))) {
+            throw new Error(`Invalid date for question ${question.id}`);
           }
           break;
+
         default:
-          //
           break;
       }
     }
 
-    if (answer !== null) {
+    // ---------------- TRANSACTION START ----------------
+    transaction = await sequelize.transaction();
+
+    let answer = await Answer.findOne({ where: { orderId } });
+
+    // Save Answer
+    if (answer) {
       await Answer.update(
         {
-          answers: responses,
-          files,
+          answers: validResponses,
         },
-        {
-          where: { orderId: orderId },
-          returning: true,
-          plain: true,
-        }
+        { where: { orderId }, transaction }
       );
     } else {
-      answer = await Answer.create({
-        orderId,
-        checklistId: checklist.id,
-        inspectionManagerId: req.user.id,
-        answers: responses,
-        files,
-      });
+      answer = await Answer.create(
+        {
+          orderId,
+          checklistId: checklist.id,
+          inspectionManagerId: req.user.id,
+          answers: validResponses,
+        },
+        { transaction }
+      );
     }
 
-    t = await Answer.sequelize.transaction();
-    answer.answers = responses;
-    await t.commit();
-    res.status(201).json({ message: "Checklist answer submitted", answer });
+    const answerId = answer.id || answer.dataValues.id;
+
+    // ---------------- SAVE FILES IN fileUploads TABLE ----------------
+    if (req.files && req.files.length > 0) {
+      const fileRecords = req.files.map((file) => {
+        const questionId = file.fieldname.split("_")[1];
+
+        return {
+          fileName: file.filename,
+          filePath: file.path,
+          questionId: Number(questionId),
+          answerId: answerId,
+        };
+      });
+
+      await FileUpload.bulkCreate(fileRecords, { transaction });
+    }
+
+    await transaction.commit();
+
+    return res.status(201).json({
+      message: "Checklist answers & files submitted successfully",
+      answer,
+    });
   } catch (error) {
-    if (t) await t.rollback();
+    if (transaction) await transaction.rollback();
+
+    deleteFiles(req, require("fs"), require("path"));
+
     logger.error("submitAnswer error:", error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
+
+
 
 exports.getAnswersByOrder = async (req, res) => {
   try {
     let answer = await Answer.findOne({
       where: { orderId: req.params.orderId },
     });
-    answer.answers = JSON.parse(answer.answers)
+    answer.answers = JSON.parse(answer.answers);
     res.json(answer);
   } catch (error) {
     logger.error("getAnswersByOrder error:", error);

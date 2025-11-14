@@ -7,6 +7,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("../swagger/swagger.config");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

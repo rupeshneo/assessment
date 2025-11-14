@@ -17,14 +17,21 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "answerId",
         as: "fileUploads",
       });
+      Answer.hasMany(models.ChecklistQuestion, {
+        foreignKey: "checklistId",
+        sourceKey: "checklistId",
+        as: "questions",
+      });
     }
   }
 
   Answer.init(
     {
       answers: { type: DataTypes.JSON, allowNull: true },
-      files: { type: DataTypes.JSON, allowNull: true },
       submittedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+      inspectionManagerId: { type: DataTypes.INTEGER },
+      orderId: { type: DataTypes.INTEGER },
+      checklistId: { type: DataTypes.INTEGER },
     },
     { sequelize, modelName: "Answer", tableName: "answers" }
   );

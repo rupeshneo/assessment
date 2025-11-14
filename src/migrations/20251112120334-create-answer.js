@@ -13,9 +13,6 @@ module.exports = {
         type: Sequelize.JSON,
         allowNull: true,
       },
-      files: {
-        type: Sequelize.JSON,
-      },
       submittedAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
