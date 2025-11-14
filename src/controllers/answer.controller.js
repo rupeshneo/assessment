@@ -1,10 +1,17 @@
 const { deleteFiles } = require("../helpers/helper");
-const { Answer, Checklist, ChecklistQuestion, FileUpload, Order, sequelize } = require("../models");
+const {
+  Answer,
+  Checklist,
+  ChecklistQuestion,
+  FileUpload,
+  Order,
+  sequelize,
+} = require("../models");
 const logger = require("../utils/logger");
 
 exports.submitAnswer = async (req, res) => {
   let transaction;
-
+  console.log(req.files);
   try {
     const { orderId, responses } = req.body;
     const parsedResponses = JSON.parse(responses || "[]");
@@ -29,7 +36,7 @@ exports.submitAnswer = async (req, res) => {
       questionIds.includes(r.questionId)
     );
 
-    // ---------------- VALIDATION LOOP ----------------
+    // VALIDATION LOOP
     for (const question of checklist.questions) {
       const userResponse = validResponses.find(
         (resp) => resp.questionId === question.id
@@ -88,7 +95,7 @@ exports.submitAnswer = async (req, res) => {
       }
     }
 
-    // ---------------- TRANSACTION START ----------------
+    // TRANSACTION START
     transaction = await sequelize.transaction();
 
     let answer = await Answer.findOne({ where: { orderId } });
@@ -115,19 +122,20 @@ exports.submitAnswer = async (req, res) => {
 
     const answerId = answer.id || answer.dataValues.id;
 
-    // ---------------- SAVE FILES IN fileUploads TABLE ----------------
+    // SAVE FILES IN fileUploads TABLE
     if (req.files && req.files.length > 0) {
       const fileRecords = req.files.map((file) => {
         const questionId = file.fieldname.split("_")[1];
-
-        return {
-          fileName: file.filename,
-          filePath: file.path,
-          questionId: Number(questionId),
-          answerId: answerId,
-        };
+        if (checklist.questions.find((q) => q.id === Number(questionId) && q.type === "file")) {
+          return {
+            fileName: file.filename,
+            filePath: file.path,
+            questionId: Number(questionId),
+            answerId: answerId,
+          };
+        }
       });
-
+      console.log(fileRecords);
       await FileUpload.bulkCreate(fileRecords, { transaction });
     }
 
@@ -136,6 +144,7 @@ exports.submitAnswer = async (req, res) => {
     return res.status(201).json({
       message: "Checklist answers & files submitted successfully",
       answer,
+      files: await FileUpload.findAll({ where: { answerId } }),
     });
   } catch (error) {
     if (transaction) await transaction.rollback();
@@ -146,8 +155,6 @@ exports.submitAnswer = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-
 
 exports.getAnswersByOrder = async (req, res) => {
   try {

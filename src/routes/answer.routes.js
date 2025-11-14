@@ -24,32 +24,36 @@ module.exports = router;
  * @swagger
  * /answers:
  *   post:
- *     summary: Submit checklist answers (Inspection only)
+ *     summary: Submit checklist answers
  *     tags: [Answers]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               orderId:
  *                 type: integer
- *                 example: 1
+ *                 example: 1   
  *               responses:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     questionId:
- *                       type: integer
- *                       example: 1
- *                     answer:
- *                       type: string
- *                       example: "Yes"
+ *                 type: string
+ *                 description: JSON stringified array of responses
+ *                 example: '[{"questionId": 1,"answers": ""},{"questionId": 2,"answers": "yes"},{"questionId": 3,"answers": "Apple,Orange"},{"questionId": 4,"answers": "No comments"},{"questionId": 5,"answers": "5"},{"questionId": 6,"answers": "JavaScript,Python"},{"questionId": 7,"answers": "dd"},{"questionId": 8,"answers": "2024-06-15 10:30:00"},{"questionId": 9,"answers": "1990-01-01"}]'
+ *               files:
+ *                type: array
+ *                description: Array of files to upload
+ *                items:
+ *                  type: string
+ *                  format: binary
+ *                  description: Upload files. File fieldnames must be question_{id} (e.g., question_7)
  *     responses:
- *       201:
+ *       200:
  *         description: Answers submitted successfully
+ *       400:
+ *         description: Bad request due to validation errors
  */
 
 /**
