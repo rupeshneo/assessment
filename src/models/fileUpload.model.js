@@ -14,7 +14,16 @@ module.exports = (sequelize, DataTypes) => {
   FileUpload.init(
     {
       fileName: { type: DataTypes.STRING },
-      filePath: { type: DataTypes.STRING },
+      filePath: {
+        type: DataTypes.STRING,
+      },
+      fileUrl: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return `${process.env.BASE_URL}/${this.getDataValue("filePath")}`;
+        },
+      },
+      answerId: { type: DataTypes.INTEGER },
       questionId: { type: DataTypes.INTEGER },
     },
     { sequelize, tableName: "fileUploads", modelName: "FileUpload" }

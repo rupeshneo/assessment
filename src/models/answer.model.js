@@ -27,7 +27,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Answer.init(
     {
-      answers: { type: DataTypes.JSON, allowNull: true },
+      answers: { type: DataTypes.JSON, allowNull: true, defaultValue: {},
+      // get() {
+      //     const rawValue = this.getDataValue("answers");          
+      //     return rawValue ? JSON.parse(rawValue) : null;
+      //   },
+      },
       submittedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
       inspectionManagerId: { type: DataTypes.INTEGER },
       orderId: { type: DataTypes.INTEGER },

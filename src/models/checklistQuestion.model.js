@@ -24,7 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       options: {
         type: DataTypes.JSON,
-        allowNull: true, // e.g. ["Yes", "No"]
+        allowNull: true,
+        get() {
+          const rawValue = this.getDataValue("options");
+          return rawValue ? JSON.parse(rawValue) : null;
+        }
       },
       required: {
         type: DataTypes.BOOLEAN,
