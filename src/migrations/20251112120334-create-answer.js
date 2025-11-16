@@ -12,6 +12,7 @@ module.exports = {
       answers: {
         type: Sequelize.JSON,
         allowNull: true,
+        defaultValue: "[]",
       },
       submittedAt: {
         type: Sequelize.DATE,
@@ -20,17 +21,17 @@ module.exports = {
       inspectionManagerId: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       orderId: {
         type: Sequelize.INTEGER,
         references: { model: "orders", key: "id" },
-        onDelete: "CASCADE",
+        onDelete: "NO ACTION",
       },
       checklistId: {
         type: Sequelize.INTEGER,
         references: { model: "checklists", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +41,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      }
     });
   },
 

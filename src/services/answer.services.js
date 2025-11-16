@@ -56,6 +56,9 @@ exports.submitAnswer = async (req, res) => {
     // SAVE FILES IN fileUploads TABLE
     await saveFiles(answer.id, req, transaction, fileUploads, checklist);
 
+    // UPDATE ORDER STATUS TO in_progress
+    await order.update({ status: "in_progress" }, { transaction });
+
     // COMMIT TRANSACTION
     await transaction.commit();
 

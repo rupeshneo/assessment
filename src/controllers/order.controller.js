@@ -1,4 +1,4 @@
-const { Order, User } = require("../models");
+const { Order, User, sequelize } = require("../models");
 const logger = require("../utils/logger");
 exports.createOrder = async (req, res) => {
   try {
@@ -11,7 +11,9 @@ exports.createOrder = async (req, res) => {
     } = req.body;
 
     if (
-      (await User.findOne({ where: { id: clientId, role: "client" } })) == null
+      (await User.findOne({
+        where: { id: clientId, role: "client" },
+      })) == null
     ) {
       return res.status(400).json({ message: "Invalid client ID" });
     }
@@ -50,7 +52,21 @@ exports.createOrder = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
   try {
+    const role = req.user.role;
+
+    let whereClause = {}; 
+    if (role === "client") {
+      whereClause.clientId = req.user.id
+    } else if(role === "procurement") {
+      whereClause.procurementManagerId = req.user.id
+    } else if(role === "inspection") {
+      whereClause.inspectionManagerId = req.user.id
+    }
+    
+    if(req.query.status) whereClause.status = req.query.status;
+
     const orders = await Order.findAll({
+      where: whereClause,
       attributes: ["id", "title", "description", "status"], // Order table ke selected columns
       include: [
         {
@@ -72,7 +88,7 @@ exports.getAllOrders = async (req, res) => {
             {
               association: "questions",
               attributes: ["id", "questionText", "type", "options", "required"], // jo columns chahiye wo likho
-              as: "questions"
+              as: "questions",
             },
           ],
         },
@@ -104,16 +120,32 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
-exports.updateOrderStatus = async (req, res) => {
+exports.orderStatusUpdate = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
-    const { status } = req.body;
     const order = await Order.findByPk(req.params.id);
+    let message = "";
     if (!order) return res.status(404).json({ message: "Order not found" });
+    if (req.user.role === "inspection" && order.status !== "inspected") {
+      order.statusFlow = [...order.statusFlow, "inspected"];
+      order.status = "inspected";
+      message = "Order marked as inspected"
+    }
+    if(req.user.role === "procurement") {
+      order.statusFlow = [...order.statusFlow, req.body.status];
+      order.status = req.body.status;
+      if(order.comment && req.body.status === "reinspection_required") {
+        order.comment = req?.body?.comment;
+      }
+      message = `Order marked as ${req.body.status}`
+    }
 
-    await order.update({ status });
-    res.json({ message: "Order status updated", order });
+    await order.save({ transaction });
+    await transaction.commit();
+    res.json({ message });
   } catch (error) {
-    logger.error("updateOrderStatus error:", error);
-    res.status(500).json({ message: error.message });
+    if (transaction) await transaction.rollback();
+    logger.error("orderInspected error:", error);
+    res.status(500).json({ message: error.stack });
   }
 };

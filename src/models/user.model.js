@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       assign: { type: DataTypes.INTEGER, allowNull: true },
       isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
-    { sequelize, tableName: "users", modelName: "User" }
+    { sequelize, tableName: "users", modelName: "User", paranoid: true }
   );
 
   return User;

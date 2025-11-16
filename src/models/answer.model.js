@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       orderId: { type: DataTypes.INTEGER },
       checklistId: { type: DataTypes.INTEGER },
     },
-    { sequelize, modelName: "Answer", tableName: "answers" }
+    { sequelize, modelName: "Answer", tableName: "answers", paranoid: true }
   );
 
   return Answer;

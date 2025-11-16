@@ -24,9 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.TEXT },
-      isDefault: { type: DataTypes.BOOLEAN, defaultValue: false },
+      createdById: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "Users", key: "id" },
+      },
+      orderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "Orders", key: "id" },
+      }
     },
-    { sequelize, modelName: "Checklist", tableName: "checklists" }
+    { sequelize, modelName: "Checklist", tableName: "checklists", paranoid: true }
   );
 
   return Checklist;

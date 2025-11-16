@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const hashedPassword = await bcrypt.hash("Rupesh@123", 10);
 
     await queryInterface.sequelize.query(
       "INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `createdBy`, `assign`, `role`, `isActive`, `createdAt`, `updatedAt`) VALUES \
@@ -15,13 +14,13 @@ module.exports = {
     );
 
     await queryInterface.sequelize.query(
-      "INSERT INTO `orders` (`id`, `title`, `description`, `status`, `clientId`, `procurementManagerId`, `inspectionManagerId`, `createdAt`, `updatedAt`) VALUES \
-      (1,	'Order for office supplies',	'Order for electronic components',	'created',	4,	2,	3,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
+      "INSERT INTO `orders` (`id`, `title`, `description`, `status`, `statusFlow`, `clientId`, `procurementManagerId`, `inspectionManagerId`, `createdAt`, `updatedAt`) VALUES \
+      (1,	'Order for office supplies',	'Order for electronic components',	'created', '[\"created\"]',	4,	2,	3,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
     );
 
     await queryInterface.sequelize.query(
-      "INSERT INTO `checklists` (`id`, `name`, `description`, `isDefault`, `createdById`, `orderId`, `createdAt`, `updatedAt`) VALUES \
-      (1,	'New Checklist',	'Checklist description',	1,	2,	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
+      "INSERT INTO `checklists` (`id`, `name`, `description`, `createdById`, `orderId`, `createdAt`, `updatedAt`) VALUES \
+      (1,	'New Checklist',	'Checklist description',	2,	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
     );
 
     await queryInterface.sequelize.query(

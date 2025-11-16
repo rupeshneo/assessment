@@ -26,11 +26,28 @@ module.exports = (sequelize, DataTypes) => {
       title: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.TEXT },
       status: {
-        type: DataTypes.ENUM("created", "in_progress", "completed", "verified"),
+        type: DataTypes.ENUM(
+          "created",
+          "inspection_pending",
+          "inspected",
+          "reinspection_required",
+          "completed"
+        ),
         defaultValue: "created",
       },
+      statusFlow: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: ["created"],
+        get(value) {
+          return JSON.parse(this.getDataValue(value))
+        },
+      },
+      clientId: { type: DataTypes.INTEGER, allowNull: false },
+      procurementManagerId: { type: DataTypes.INTEGER },
+      inspectionManagerId: { type: DataTypes.INTEGER, allowNull: false },
     },
-    { sequelize, tableName: "orders", modelName: "Order" }
+    { sequelize, tableName: "orders", modelName: "Order", paranoid: true }
   );
 
   return Order;

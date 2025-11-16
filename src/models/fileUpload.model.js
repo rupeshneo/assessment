@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       answerId: { type: DataTypes.INTEGER },
       questionId: { type: DataTypes.INTEGER },
     },
-    { sequelize, tableName: "fileUploads", modelName: "FileUpload" }
+    { sequelize, tableName: "fileUploads", modelName: "FileUpload", paranoid: true }
   );
 
   return FileUpload;

@@ -34,11 +34,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      checklistId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "checklists",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+      }
     },
     {
       sequelize,
       modelName: "ChecklistQuestion",
       tableName: "checklistQuestions",
+      paranoid: true,
     }
   );
 

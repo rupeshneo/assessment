@@ -19,6 +19,7 @@ module.exports = {
       },
       options: {
         type: Sequelize.JSON,
+        defaultValue: "[]",
       },
       required: {
         type: Sequelize.BOOLEAN,
@@ -28,6 +29,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: "checklists", key: "id" },
         onDelete: "CASCADE",
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +39,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      }
     });
   },
 
