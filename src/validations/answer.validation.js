@@ -1,5 +1,4 @@
-const { body, validationResult } = require("express-validator");
-const { Order } = require("../../models");
+const { body } = require("express-validator");
 
 const answerValidation = [
   body("orderId")
@@ -8,23 +7,36 @@ const answerValidation = [
     .isNumeric()
     .withMessage("Order ID must be a number"),
 
-  body("responses")
-    .notEmpty()
-    .withMessage("Answer content is required")
-    .isArray({ min: 1 })
-    .withMessage("Responses must be a non-empty array"),
+body("responses")
+  .notEmpty()
+  .withMessage("Responses is required")
+  .custom((value) => {
+    let parsed;
 
-  body("responses.*.questionId")
-    .notEmpty()
-    .withMessage("Question ID is required for each response")
-    .isNumeric()
-    .withMessage("Question ID must be a number"),
+    try {
+      parsed = JSON.parse(value); // because it comes as string
+    } catch (err) {
+      throw new Error("Responses must be valid JSON");
+    }
 
-  body("responses.*.answer")
-    .notEmpty()
-    .withMessage("Answer is required for each response")
-    .isString()
-    .withMessage("Answer must be a string"),
+    if (!Array.isArray(parsed)) {
+      throw new Error("Responses must be an array");
+    }
+
+    parsed.forEach((item, index) => {
+      if (!item.questionId) {
+        throw new Error(`questionId is required at index ${index}`);
+      }
+      if (
+        item.answers === undefined ||
+        item.answers === null
+      ) {
+        throw new Error(`answers is required at index ${index}`);
+      }
+    });
+
+    return true;
+  })
 ];
 
 module.exports = {

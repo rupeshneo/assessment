@@ -6,7 +6,7 @@ const { authenticateUser: auth } = require("../middlewares/auth.middleware");
 
 router.post("/", auth, roleAuth("procurement"), orderController.createOrder);
 router.get("/", auth, orderController.getAllOrders);
-router.put("/:id/inspected", auth, roleAuth("admin", "procurement", "inspection"), orderController.orderStatusUpdate);
+router.put("/:id/status", auth, roleAuth( "procurement", "inspection"), orderController.orderStatusUpdate);
 router.get("/:id", auth, orderController.getOrderById);
 
 module.exports = router;

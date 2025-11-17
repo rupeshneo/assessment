@@ -3,9 +3,10 @@ const router = express.Router();
 const checklistController = require("../controllers/checklist.controller");
 const { authorizeRoles: roleAuth } = require("../middlewares/auth.middleware");
 const { authenticateUser: auth } = require("../middlewares/auth.middleware");
+const { checklistValidationRules } = require("../validations/checklist.validation");
 
 // Procurement Manager creates checklist
-router.post("/", auth, roleAuth("procurement"), checklistController.createChecklist);
+router.post("/", auth, roleAuth("procurement"), checklistValidationRules, checklistController.createChecklist);
 
 // Anyone (with permission) can view checklist
 router.get("/:id", auth, checklistController.getChecklist);
@@ -46,7 +47,7 @@ module.exports = router;
  *                 items:
  *                   type: object
  *                   properties:
- *                     text:
+ *                     questionText:
  *                       type: string
  *                       example: "Question text"
  *                     type:
@@ -83,3 +84,42 @@ module.exports = router;
  *       200:
  *         description: Checklist retrieved successfully
  */ 
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ChecklistRequest:
+ *       type: object
+ *       required:
+ *         - orderId
+ *         - name
+ *         - description
+ *         - questions
+ *       properties:
+ *         orderId:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: New Checklist
+ *         description:
+ *           type: string
+ *           example: Checklist description
+ *         questions:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               questionText:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               options:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               required:
+ *                 type: boolean
+ */

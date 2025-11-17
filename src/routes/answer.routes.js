@@ -4,9 +4,10 @@ const answerController = require("../controllers/answer.controller");
 const { authorizeRoles: roleAuth } = require("../middlewares/auth.middleware");
 const { authenticateUser: auth } = require("../middlewares/auth.middleware");
 const uploadMiddleware = require("../middlewares/upload.middleware");
+const { answerValidation } = require("../validations/answer.validation");
 
 // Inspection Manager submits answers
-router.post("/", auth, roleAuth("inspection"),uploadMiddleware.any(),  answerController.submitAnswer);
+router.post("/", auth, roleAuth("inspection") ,uploadMiddleware.any(), answerValidation, answerController.submitAnswer);
 
 // View answers for specific order
 router.get("/order/:orderId", auth, answerController.getAnswersByOrder);

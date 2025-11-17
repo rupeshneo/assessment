@@ -1,30 +1,18 @@
 "use strict";
-const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Order extends Model {
-    static associate(models) {
-      Order.belongsTo(models.User, { as: "client", foreignKey: "clientId" });
-      Order.belongsTo(models.User, {
-        as: "procurementManager",
-        foreignKey: "procurementManagerId",
-      });
-      Order.belongsTo(models.User, {
-        as: "inspectionManager",
-        foreignKey: "inspectionManagerId",
-      });
-      Order.hasOne(models.Checklist, {
-        foreignKey: "orderId",
-        as: "checklist",
-      });
-      Order.hasMany(models.Answer, { foreignKey: "orderId", as: "answers" });
-    }
-  }
-
-  Order.init(
+  const Order = sequelize.define(
+    "Order",
     {
-      title: { type: DataTypes.STRING, allowNull: false },
-      description: { type: DataTypes.TEXT },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+
+      description: {
+        type: DataTypes.TEXT,
+      },
+
       status: {
         type: DataTypes.ENUM(
           "created",
@@ -35,20 +23,66 @@ module.exports = (sequelize, DataTypes) => {
         ),
         defaultValue: "created",
       },
+
       statusFlow: {
         type: DataTypes.JSON,
         allowNull: true,
         defaultValue: ["created"],
-        get(value) {
-          return JSON.parse(this.getDataValue(value))
+
+        // FIXED GETTER
+        get() {
+          const raw = this.getDataValue("statusFlow");
+          return raw ? raw : [];
         },
       },
-      clientId: { type: DataTypes.INTEGER, allowNull: false },
-      procurementManagerId: { type: DataTypes.INTEGER },
-      inspectionManagerId: { type: DataTypes.INTEGER, allowNull: false },
+
+      clientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
+      procurementManagerId: {
+        type: DataTypes.INTEGER,
+      },
+
+      inspectionManagerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
-    { sequelize, tableName: "orders", modelName: "Order", paranoid: true }
+    {
+      tableName: "orders",
+      paranoid: true,
+    }
   );
+
+  // Associations
+  Order.associate = (models) => {
+    Order.belongsTo(models.User, {
+      as: "client",
+      foreignKey: "clientId",
+    });
+
+    Order.belongsTo(models.User, {
+      as: "procurementManager",
+      foreignKey: "procurementManagerId",
+    });
+
+    Order.belongsTo(models.User, {
+      as: "inspectionManager",
+      foreignKey: "inspectionManagerId",
+    });
+
+    Order.hasOne(models.Checklist, {
+      foreignKey: "orderId",
+      as: "checklist",
+    });
+
+    Order.hasMany(models.Answer, {
+      foreignKey: "orderId",
+      as: "answers",
+    });
+  };
 
   return Order;
 };

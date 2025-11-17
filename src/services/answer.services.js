@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const { deleteFiles, deleteFilesByPaths } = require("../helpers/helper");
 const {
   Answer,
@@ -8,10 +9,16 @@ const {
   sequelize,
 } = require("../models");
 const logger = require("../utils/logger");
+const { validationError } = require("../utils/response");
 
 exports.submitAnswer = async (req, res) => {
   let transaction;
   try {
+    const errors = validationResult(req);    
+    if (!errors.isEmpty()) {
+      return validationError(res, errors.array()[0].msg)
+    }
+
     const { orderId, responses } = req.body;
     const parsedResponses = JSON.parse(responses || "[]");
     const order = await Order.findOne({ where: { id: orderId } });
@@ -44,7 +51,7 @@ exports.submitAnswer = async (req, res) => {
     transaction = await sequelize.transaction();
 
     // Save Answer
-    await saveAnswer(
+    answer = await saveAnswer(
       answer,
       validResponses,
       transaction,
@@ -57,7 +64,9 @@ exports.submitAnswer = async (req, res) => {
     await saveFiles(answer.id, req, transaction, fileUploads, checklist);
 
     // UPDATE ORDER STATUS TO in_progress
-    await order.update({ status: "in_progress" }, { transaction });
+    await order.update({ status: "inspection_pending" }, { transaction });
+
+    answer.answers = JSON.parse(answer.answers);
 
     // COMMIT TRANSACTION
     await transaction.commit();
@@ -69,10 +78,8 @@ exports.submitAnswer = async (req, res) => {
     });
   } catch (error) {
     if (transaction) await transaction.rollback();
-
-    deleteFiles(req);
-
-    logger.error("submitAnswer error:", error);
+    deleteFiles(req);    
+    logger.error(`submitAnswer error: ${error.stack}`, error);
     return res.status(500).json({ message: error.message, error: error.stack });
   }
 };
@@ -170,6 +177,10 @@ const saveAnswer = async (
       },
       { where: { orderId }, transaction }
     );
+    answer = await Answer.findOne({
+      where: { id: answer.id },
+      transaction,
+    });
   } else {
     answer = await Answer.create(
       {
@@ -181,6 +192,7 @@ const saveAnswer = async (
       { transaction }
     );
   }
+  return answer;
 };
 
 const saveFiles = async (
@@ -230,7 +242,6 @@ const saveFiles = async (
         { where: { id: fileData.id }, transaction }
       );
     }
-
     deleteFilesByPaths(deletFilePaths);
   }
 };

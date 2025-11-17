@@ -1,33 +1,45 @@
 "use strict";
-const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class FileUpload extends Model {
-    static associate(models) {
-      FileUpload.belongsTo(models.Answer, {
-        foreignKey: "answerId",
-        as: "answer",
-      });
-    }
-  }
-
-  FileUpload.init(
+  const FileUpload = sequelize.define(
+    "FileUpload",
     {
-      fileName: { type: DataTypes.STRING },
+      fileName: {
+        type: DataTypes.STRING,
+      },
+
       filePath: {
         type: DataTypes.STRING,
       },
+
       fileUrl: {
         type: DataTypes.VIRTUAL,
         get() {
           return `${process.env.BASE_URL}/${this.getDataValue("filePath")}`;
         },
       },
-      answerId: { type: DataTypes.INTEGER },
-      questionId: { type: DataTypes.INTEGER },
+
+      answerId: {
+        type: DataTypes.INTEGER,
+      },
+
+      questionId: {
+        type: DataTypes.INTEGER,
+      },
     },
-    { sequelize, tableName: "fileUploads", modelName: "FileUpload", paranoid: true }
+    {
+      tableName: "fileUploads",
+      paranoid: true,
+    }
   );
+
+  // Associations
+  FileUpload.associate = (models) => {
+    FileUpload.belongsTo(models.Answer, {
+      foreignKey: "answerId",
+      as: "answer",
+    });
+  };
 
   return FileUpload;
 };

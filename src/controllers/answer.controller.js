@@ -1,4 +1,7 @@
-const { submitAnswer, getAnswersByOrder } = require("../services/answer.services");
+const {
+  submitAnswer,
+  getAnswersByOrder,
+} = require("../services/answer.services");
 
 exports.submitAnswer = async (req, res) => {
   return submitAnswer(req, res);
