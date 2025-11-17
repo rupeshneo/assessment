@@ -18,7 +18,7 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/orders", require("./routes/order.routes"));
 app.use("/api/checklists", require("./routes/checklist.routes"));
-app.use("/api/questions", require("./routes/checklistQuestion.routes"));
+app.use("/api/checklist-questions", require("./routes/checklistQuestion.routes"));
 app.use("/api/answers", require("./routes/answer.routes"));
 
 app.use((req, res, next) => {

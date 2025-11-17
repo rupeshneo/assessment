@@ -1,7 +1,10 @@
 const { ChecklistQuestion } = require("../models");
+const logger = require("../utils/logger");
+
 
 exports.createQuestion = async (req, res) => {
   try {
+    req.body.options = JSON.stringify(req.body.options);
     const question = await ChecklistQuestion.create(req.body);
     res.status(201).json(question);
   } catch (error) {
@@ -14,7 +17,6 @@ exports.updateQuestion = async (req, res) => {
   try {
     const question = await ChecklistQuestion.findByPk(req.params.id);
     if (!question) return res.status(404).json({ message: "Question not found" });
-
     await question.update(req.body);
     res.json({ message: "Question updated", question });
   } catch (error) {

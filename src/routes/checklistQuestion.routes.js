@@ -17,7 +17,7 @@ module.exports = router;
  *   description: API for managing checklist questions
  */
 
-/** 
+/**
  * @swagger
  * /checklist-questions:
  *   post:
@@ -33,6 +33,21 @@ module.exports = router;
  *               questionText:
  *                 type: string
  *                 example: Is the packaging intact?
+ *               type:
+ *                 type: string
+ *                 enum: [text, radio, dropdown, textarea, number, checkbox, file, datetime, date]
+ *                 example: radio
+ *               required:
+ *                 type: boolean
+ *                 example: true
+ *               options:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Yes", "No", "Not Applicable"]
+ *               checklistId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201:
  *         description: Checklist question created successfully
