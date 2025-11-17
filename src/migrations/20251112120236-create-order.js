@@ -15,25 +15,35 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       status: {
-        type: Sequelize.ENUM("created", "in_progress", "completed", "verified"),
+        type: Sequelize.ENUM("created", "inspection_pending", "inspected", "reinspection_required", "completed"),
         defaultValue: "created",
+      },
+      statusFlow: {
+        type: Sequelize.JSON,
+        defaultValue: '["created"]'
+      },
+      comment: {
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
       clientId: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
-        onDelete: "SET NULL",
+        allowNull: true,
+        onDelete: "NO ACTION",
       },
       procurementManagerId: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       inspectionManagerId: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +51,10 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

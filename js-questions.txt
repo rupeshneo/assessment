@@ -1,0 +1,441 @@
+Explain monolith architecture?
+Is Javascript multi thread or single thread?
+What are promises and how it works?
+There is product and it has category of 20k now i want to store this in redis without effecting the server performance how to do that?
+If I bifurcate the monolith architecture to controller, module architecture then how many controller will be there?
+How stream works?
+I want to secure my nodejs application so what should i do?
+What is event loop?
+what are technologies used so far in the backend, about socket.io
+Tell me about yourself
+promise and observable
+event loop
+Lazy Loading
+Difference between node and Express
+increase speed of nodejs application
+Callback hell
+Event loop in node js.
+How do you manage your project
+FizzBuzz code
+Design a service to manage employee leaves and WFH request in MongoDB
+Types of Stream in Node.JsBuffer in Node.JsEnvironment variableswhat if your db will be down, what are measure for not loose any dataquestions related to your projectsJWTwhy secret keySecurity in node.js other than authenticationTypes of ScalingWhen to prefer vertical scalingMethods we can perform async operation in node.js
+How can we maintain latency of database
+What is Ddos?
+When we do write operation and database failed in this situation how can you store data?
+Security in node JS?
+Horizantal scaling and Vertical Scaling?
+what if your db will be down, what are measure for not loose any data,
+Questions related to projects,
+1.basic node.js 
+2.basic mongodb 
+3.paranoid and  eager loading in sequelize 
+4.cdn in aws 
+5.security in node.js in depth 
+6.virtual populet in mongo 
+7.design of db schema related question. 
+8.what if your db will be down, what are measure for not loose any data 
+9.questions related to your projects 10.prepare for ORM and ODM questions as well.(Type ORM, Sequelize, mongoose)
+Find the count of two consecutive vowels in a given string
+prop type, children prop
+callback hellcallback
+event loop
+You've worked with NodeJs right. So what did you build using NodeJs?
+what is the diff between nodejs and js?
+what is rabbitmq vs kafk 
+what is kafkawhat is node js && how it workshow nodejs understand which code is synchronous and asynchrous?
+when does event loop comes in picture if node js async?
+what are the types of queues in event loop?what is threadpool?
+what is the maximum size of threadpool?how nodejs handle CPU-intensive tasks?
+diff between worker threads and child process?
+maximum size of threads?
+when event loop execute micro and macro task? 
+what the purpose of micro and macro tasktypes of child process and how to it works and have use ?
+git vs githubsocket.io - working and some scenario based questions if there is multiple instances of servers then how you manages it for socket?
+microservices vs monolight projectswhat is horizantal scalling?
+how can do horizantal scalling in nodejs?
+what is ngnix? and  it working?
+how it works as load balancer?
+why we use rediswhich one is fast redis vs mongodbwhere do we use redis?
+why need to use store token in redis?
+what is engine of mongodb?
+how it handles query?
+how to identify slow query?
+why we use indexing in mongodb and how it works in depth?
+what is compund indexing?
+ how does it works?
+if I have created index on userId and emailId but serching with only userId then which indexing should use here?
+why indexing is fast?
+what is maximum size of doument we can store in mongodb?
+how can we store data which size is more than maximum document limit in mongodb?
+what is ES-6?what is the diff between arrow function and normal function?what is promises?is js synchronous?what is the diff between promises and async await?
+interview completed  interview question tell me about your selfabout your projectwhat is nodejswhat we need to select node js instead of other programming languagehttp status coded and what is useapi validation  event loop and how workinghttp vs socketwhat is JWT and  how is workinges 5 vs es6closurehow multithreading workhow single threading workinghow request response workhow clustering workwhen we need to use let var and constglobal memory and context memory
+1) What is Node.js ?
+2) Event loop in Node.js?
+3) Synchronous and Asynchronous code execution?
+4) SQL Injection?
+ 5)  What is REST API 6) Count the Letter programme.let letters = "aaabbaabbbccdcd"; output = { a: 5, b: 5, c: 3, d: 2 }7) Reverse String = "lius";output = "suil"8) Indexing in SQL?
+
+// Input: arr[] = [1, 2, 3, 6, 3, 6, 1]// Output: 1, 3, 6// Explanation: The numbers 1 , 3 and 6 appears more than once in the array.// Input : arr[] = [1, 2, 3, 4 ,3]// Output: 3// Explanation: The number 3 appears more than once in the array. function reptredElementArray(arr){let see_eel = new Set();let dupliucate = new Set();for(let el of arr){if(see_eel.has(el)){dupliucate.add(el)}else{see_eel.add(el);}}return [...dupliucate];}const arr = [1, 2, 3, 6, 3, 6, 1];console.log(reptredElementArray(arr));
+1) Introduction2) Event loop in node js,3) Closure in javascript,4) setImmediate vc Process.nextTick,5) Streams in node js,6) Cluster in node js,7) How can we secure node js application,8) ES6 features,9) async/await10) How node js achieve concurrency,11) Event Delegation in Javascript,12) Difference between put & patch method of HTTP,13) How we can context switch in worker threads14) How can we improve performance of node js application,15) How can we prevent memory leaks in nodejs application.16) How Javascript use garbage collector.17) What is debouncing.18) write a program to add two numbers without using arithmetic operator and in built function,19) Write a program of queue using stacks,20) Write a program to reverse string by using stack,21) 0,2,10,30 in this series, what is next number after 30
+How do we differ a normal developer and senior developer like why we should consider a guy as senior guy?
+Tell us about your strength?
+Why choose NodeJS?
+Have you worked on microservice?
+Why should we implement microservice and docker in our application?
+How do you consider how much instance you should spawn of your microservice and what are the challenges in that?
+Have you worked on agile then how it works and why we should go with Agile methodology?
+What is sprint retrospective?
+How to handles error in middleware?
+ like the generic way for that.What is scrum how it works?
+
+introduction,what is middleware?
+ how its work?
+ use cases?
+event loop?
+ why we use?
+callback hell?
+What is microservices,What is streams in nodejs?
+promises with real time example?
+dependency injectiondesign pattern with example?
+how to deploy the project on git?
+design patterndifference between inner, outer join,create schema for users and messages.Select query with join.Difference b/w Horizantal scaling and vertical scaling
+G-15328 | Zuno | MERN 6+- Recent experience and tech stack used.- In your career have you done any great thing that has been taken as extra initiative?
+- Do you have experience in the frontend?
+ Relevent exp?
+ Relevent exp in backend?
+- Can you tell me something intersting about nodeJS?
+ - Have you come across any amezing feature or functionality that only node provides?
+- Do you have experience in system design?
+- What are the challanges you have faced?
+ In answer I have said about AES256 encryption logic, so he asked me to write the code for AES256 encryption in non js text editor.- What are difference between spwan and fork nodejs?
+- Write down the query syntex for 3rd heighest salary- Write the code for Call an api and handle the response.- Do you know anything about the design like: facad, dependancy injection, ioc?
+- What is eager loading and lazy loading?
+- In react how we can do the lazy loading?
+ which package we will use for this?
+- what is http code 403 and diff between http code 200 & 201?
+
+What is the use of middleware
+Find two elements in a sorted array whose sum equals a target valuearray ?
+ -3 0 3 6 8 14 18 25target value ?
+ 17 -> 3 + 14
+CSS questions
+Write a function to implement reduce function
+Difference between map and filter.
+What other options do we have for authentication and authorization besides using JWT
+Callbacks, promises, and async/await
+Streams in nodejs
+How to secure the JWT tokens
+what is Inner join and Full join?
+
+What is memory leak in nodejs?
+Explain middeware?
+What is the differnce between == and === ?
+What is the use of nodemon?
+What is cluster module?
+If i have 20 variables in .env file then where does it get stored(hardware/ram)?
+Where will you declare the rate limiting like in controller/routes?
+Explain the use of Explain and Analyze?
+How to handle error in async?
+I want to implement the pagination in mongodb how to do that?
+If i don't want to store the enironment variables in .env file then where can i store?
+Defference between null and undefined?
+Have you ever used CTE(Common table Expression) in MySQL and what is the use of that?
+Where does the redis store the data?
+How will you define rate limiting?
+What are indexing in DB?
+How will you handle rate limiting if all the users are in from same network?
+How to manage environment variables in nodejs?
+Difference between require and import?
+Difference between let, var, const?
+What is event driven architecture?
+n/a
+- How to create index in mongodb- Any Profiling tool you have used.- How to take care memory leakage in Node JS.- If you want to do migration then what things you will take care.- How JWT token works- optimistic locking- How can we call multiple APIs in one go,- How can we optimize database query if it slow,- Git based question like revert,- Database Index based question, Drawback of indexing,- Have you used Caching,- If we have millions of records & want to search something then what things you will take care.- cluster in node JS
+Why React is better than other frameworks ?What is virtual DOM?What is reconciliation and diffing algorithm?What can we do to avoid unnecessary re-renders?Write a program to filter array for even numbers, double it and return the sum: without using loop?What is Event Loop in NodeJs?What is hoisting?React TaskFind the square root of a number without using any inbuilt functions and state its space and time complexity?
+1. What projects have you worked on2. Design the database for a parking lot system – SQL/NoSQL, schema, relations3. What state management libaries have you used4. Explain how you set up redux in a React application5. How do you send data from one component on a certain route to another when navigating in a React app6. Add an html element on the click of a button7. How do you fix the position of an element on the screen using CSS.8. Describe how you have used the AWS services that you have used
+1- What type of projects have you worked on.2- Describe about project and the functions you have worked on3- code:-'247' , '-247', '247.19' , '-247.19'          convert these strings to numbers without unsing any javascript function. 4- Event Loop
+1- What type of projects have you worked on.2- what challenges did you face in the project.3- Describe about project what are the function you have worked on4- code:-[2,6,3,98,67,43,22][1,09,67,33]Need to sort with the help of any inbuilt function5- How did you deployed your express server.6- In CSS how can we fix the position of chat-bot on the screen7- what is REST API.8- Why we use redux is there any another state management that you have used9- JWT token with passport.js how can we implemented that.10- how many type of middleware you have worked on.
+write a function to show this out by giving this input.// Input String: aaabbccaad// Output String: a3b2c2a2d1what are decorators in MongoDBwhat aggregator pipeline in mongodbwhat are the decorators and pipes in nest jsabout recent project
+1- What type of projects have you worked on.2- what challenges did you face in the project.3- SQL - table of name and timestamps were given. write query which gives output of names along with number of times they are repeated.4- remove duplicate entry from the array-  const array = [["hello","world"],["hello","world"],["hello world"],["mix","match"],["1","4","randomness"]]5- How did you deployed your express server.6- How the video streaming was implemented in your project.7- what is REST Api, difference between POST, PUT,PATCH.8- Aggrigate method in Sql9- azure services and url signing in cdn
+Introduce Your Self what will be the output of :- 1>2>3  (Why expain in detail)what are the aws services you use.write the code for promise.all and promise.sattledMongoDB QuesriesMy SQL Querieswhat is allemmatch in mondodbwhy mongodb is use over all the db (IN DETAILS)we need to fetch contact number of the specific user form the given structure:-User- id- name- contactsIds: [objectIds of Contact collection]contact- id- type [email/phone]- number:- emailIdCreate a post api what is hoisting (in brief)My SQL Queries spinnet
+Tell me about your recent project.
+Why NoSQL used ?
+Quick introduction.
+Project related questions    - Project duration    - Which frontend, backend, DB used    - Which infra used
+Which library used for data visualization and graphs ?
+AWS services used ?
+What is your total exp. and domain exp ?
+What are your secondary skills?
+How to manage state in react?
+I have 2 tables table A, Table B, in table A has 1 to 10, table B has 1 to 5, so what happen in case of rightouter join and what happens in the case of left outer join table a is left and table b is right
+Is HTML used in React?
+How JWT works?
+What will be the output of the below programvar EventEmitter = require('events');var crazy = new EventEmitter();crazy.on('event1', function () {console.log('event1 fired!');setImmediate(function () {crazy.emit('event2');});});crazy.on('event2', function () {console.log('event2 fired!');setImmediate(function () {crazy.emit('event3');});});crazy.on('event3', function () {console.log('event3 fired!');setImmediate(function () {crazy.emit('event1');});});crazy.emit('event1');
+Timing functions in Node js
+Promise.all vs Promise.allSettled
+What makes node js asynchronous?
+How Node JS works?
+Call, apply and bind difference
+Which executes first setImmediate or process.nextTick?
+What is outer join?
+How does EC2 instance works and how to scale it?
+What is ACID property?
+What is lambda function in AWS?
+What is stateless component in react?
+Difference between Java and Node JS.
+How React works?
+Is node js is single or multi threaded?
+What things you need to consider before selecting a database?
+Roles and responsibilities in previous project
+What is child process in Node JS?
+Callback hell, and how we can solve
+What is pure component in React?
+What is synthetic event?
+Context API vs Redux?
+Can we update state directly in React?
+Tell me about your self and projects that you've worked on?
+What is HOC?
+When to use Context API and when to use Redux?
+Tell me about a project that you've worked from scratch.
+How do you do routing in your react project?
+Suppose there is an ecommerce website like BigBasket what should you use Context API or Redux?
+What is ref?
+How will you plan the infrastructure of an application like Udemy, mention the components?
+How will handle database cut-out situation - YouTube comment section example
+How will you handle security in your application?
+Client Side Rendering & Service Side Rendering
+Middlewares next() function
+Multi-threading/Clustering
+Application Optimization Techniques
+PM2
+Application Performance Metrics
+API Logging Levels for Production with Levels
+Synchronous and Asynchronous
+Event Loop
+The Two Sum problem states that given an array of integers, return indices of the two numbers such that they add up to a specific target. We can’t use the same element twice.Example : Given nums = [2, 7, 11, 15], target = 9,Because nums[0] + nums[1] = 2 + 7 = 9,return [0, 1].Can't use multiple for loops2 . Program to Check Whether a String is Palindrome or Not3 . How does setTimeout work inside the loop?for (var i = 1; i <= 3; i++) {
+    setTimeout(function() { alert(index); }, i * 1000);
+    }) } Value of i should change ,  do the modifications accordingly without using ES6 4. What is http Interceptor5. ElasticSearch use cases
+1- what is Strapi? What types of projects have you worked on Strapi? 2-Integration testing in react. Jest and React testing library3- Object deep copy in JS. What is the appropriate method for this4- How can we convert string into array in JS and array back to string.5- When we pass a variable as a parameter in a function, it is pass by value or pass by reference.
+find the duplicates in array?
+What is redux ?
+What is Middleware?
+check if two Strings Are Anagram Of Each Other
+what is  promise, promise.all, promise.allsetteled?
+Difference between var, let, const.
+Feature of ES6.
+What is event loop?
+Interview question 1)When you were 8 years old, your father was 31 years old. The age difference between you and your father is therefore 31 so what will be the current age of you?2)if there is knockout match and we have 125 team how many matches will be there?3)what are the challenges you faced in development.4)what you implemented which you feels proud of .5) you both worked in same project?6)Any project in which you implemented multi language support.7)Tell me project in which whole new feature you added and got appreciation also tell me how many team member and responsibility.
+*L1 Round Questions **What is component in angular whats is directives why it is used?what is the use of services?write code of service and componet on notepad.What is lifecycle hooks and how it works.Explain the flow of angular application execution.how we can optimise give code in angualr.What are the form dynamic and other.Optimiation techniques in angular.What is latest version and its features.What is pipes and its type.What is interpolation in angular.What annonation in angularwhat is modules in angular what is routing how to implement it.how we configure env file why used it.do you know about aws and cicd.Write my sql query to fetch maximum salaried person.what is indexing how to implement.Write the code of css to implement div inside div.what is scss and why it is used.how you will write any api to fetch the data.**L2 Round Questions ***What is the component and directive.what if I right if else for div or in CSS hide div it will present there or not.What we can use to improve the performance.where my images and video file get store in angular how it will loadwhat is lazy loading how it work.lazy loading how load bigger image or video file it will load earlier or not.where my files will exist when i use lazy loading.what if 2 component having same service can i declare it multiple time.what if lazy loading is used how service will get called.what is dynamic form and how it load data.what if I want to show data on the basis of type.how view get loaded and how module get loaded what if I was to load particular component using it.how api call happened in angular.what is stand alone component difference between standalone and normal one.What is pipe and why it is used how to write custom pipe what if i want to change small part.what if I use typescript and pipe for date format which one recommend and why?what if I want to communicate with the multiple component.how to call multiple API what is syntax.loopback in node JS.What if I have multiple API and switch map only i have to use for calling.How you connect node and angular. what framework in node you have used.what is event emitter.what is scss and why we  use it.variables in scss how to implement.what mixin what is benefits with example.how to make responsive design.for making dynamic design what you will use.how you will migrate the application.what are the steps you will follow.what is features in angular 15.how lazy loading work in angular 15.what is trigger in MySQL.what is set procedure in MySQL.what is indexing how to implement.what is join and types of join in MySQL.diff. between varchar and char datatypes.how to store images in DB with path and without path.What is primary and foreign key in MySQL.Query to find the all product whose sales are high in December.
+1)Mongo db and my sql difference and features 2)What is callback in node JS3)How to handle the errors in node JS4)Do you have any experience as a lead in any project.5)We will have shift time sometime in night so is it ok?6)What are the challenges faced in project and how you overcome.7)Do you have experience in CI/CD what tools you have used.8) do you know about azure or any other cloud technology.9)Do you have any experience in mobile app development.10)Do you have any certificate in medical domain project.11)Do you know the devops configuration to deploy application.12)Explanation about the project in resume.
+performance optimisation for both frontend and backend
+expline virtual dom and how it works in react
+one to one and one to many relationship in mongodb and create a aggregation stages to obtain merged data for the same
+clouser and its application in react
+state vs props in react
+What is type script.What are the assertion types of type script.Given a string, reverse each word in the sentence using typescript.input - this is an interview output - siht si na weivretni
+What is latest version and its features.Why gurds are used in angular and explain types of it.
+What are the functionalities you aware about aws.
+What is Fs module in express.How node js works asynchronously.What is middle ware in node and why we use next in middleware.how we configure env file why used it in node js.
+What are the rxjs operators. How many you have used.
+What is varaible in Scss.What is mixing in scss and how to use it.What is Scss.
+write a mysql query to retrieve the oldest employee's name and age.What is mySql.
+how we can optimize give code in angular
+How to write custom directives in angular ?Write a custom directive which change color of button on mouse hover.Explain the flow of angular application execution.
+Write the code of css to implement div inside div.Why html5 and css3 get introduce.How to make website responsive using css
+5 coding questionsTruncate string in such a way that whatever number is given in function, that amount of alphabet of given string should be the result of the functionSum of all numbers of arrayReverse the given stringMax element of the given arrayFunction to return new array with all strings in uppercase format
+Have you worked on Docker/kubernetes?
+Ever worked on Microservices
+what is the deployment flow, ci/cd pipeline
+What is EventEmitter in Node.js?
+How does the cluster load balance work in node.js?
+How would you scale Node application?
+What are the screen sizes and classes used to set that screen size in bootstrap.
+How will you improve angualr application performanace
+How will you decide when to use promise and when to use observables.
+He  gave some module names like1st is  admin  and 2nd is order  and asked if i want to use one module form admin component to order component then waht are the steps
+asked some Bootstarp classes like PL-2 , mas column size, row span
+If Node.js is single threaded then how it handles concurrency?
+What is callback function in Node.js?
+Can we create build of node.js application
+Promise and observable in detail
+How do you manage your node.js project
+What is the difference between constructor and ngOnInit?.
+The difference between Reactive and Functional-Reactive programming
+Can we write async function in angular and how?
+Explain how you will call multiple external api to fetch information to show on dashboard
+Explain the authentication flow for an dashboard
+swagger guidleness
+git forking
+lifecycle hooks available
+normalization in table
+Use of swagger
+What are the features of angular 11 version
+Difference between ngshow and ngif
+What are stored procedure in postgress
+1) Write a react component which have one input box, one button and one paragraph.  As we click on button, it must show the input data in paragraph2) using the above component, call an api(provided by client "https://api.publicapis.org/entries?description=text") on button click, and send the data from input as a parameter to api call in "describe" key. After getting the response show the JSON in P tag3) using above component. response of above api call have a response as {count: 10, entries :[{"API":"Bhagavad Gita","Description":"Bhagavad Gita text","Auth":"OAuth","HTTPS":true,"Cors":"yes","Link":"https://bhagavadgita.io/api","Category":"Books"}]}you have to display the "Description" of each entries in boxes only 2 descriptions in one roweg: description 1     description 2   description 3     description 4and all description has border. Basically is was to check the css skills
+how would you improve react performance
+Why do we use unit testing
+How and where to store JSON token
+difference between Saga and Thunk and why do we use it
+What is the use of useRef hook
+how would you manage memory leak
+We have 2 different routes one is public and one is private. How would you manage the private routes
+type vs interfaces in typescript
+Reverse the number eg input: 461 then output must be 164. without changing it into string
+what is the use of redux. what do we use while api call and why
+HOC
+what is the difference between useCallback and useMemo and why do we use them
+How do we update reducers state
+why do we use Lazy loading and at what places
+How would you manage Refresh token thing if expired
+Why  do we do mocking in testing
+Why to use SSR and its limitations?
+What needs to be done to update to v17 and what difficult it is ?
+What are service workers & PWA ?
+Difference between angular v15 and v17
+Difference between pipes and directives in Angular?
+What is SSR?
+What is JWT Token?
+How to manage cron jobs based on different time zones?
+What is ORM?
+How to manage role-based authorization in Node JS?
+What is AOT in Angular?
+What are the new updates in Angular 15?
+What is Serverless?
+What is angular universal?
+How to secure REST APIs?
+How to store data in PWA in case of offline network?
+1-What is jwt2. How can we restrict access to a function3. What are design patterns4.what is the fork and spawn5. Program related questions6. Disadvantage of nodejs
+Explain Microservice Architecture
+How to optimise database query?
+How to handle concurrent requests on server?
+Redis properties
+How to measure webpage perfomance and how to improve the same?
+1-Questions related to MySQL like duplicate entry, Grant method, delete and truncate table, 2. Programs output3. What is nodejs4. Why nodejs is single threaded.5. What are Math functions6. How we can compare objects without library7. How can we achieve multi thread in nodejs8.Streams in nodejs9. Piping in nodejs
+Event emitter in node
+Event loop in nodejs
+How to increase security of application
+how to delete a file
+Coding questions for setTimer
+What is the use of middleware
+How to do exception handling
+Increase the performance of application
+JWT
+How the data is stored in mongodb
+Tell me about the project where you used NodeJS
+how to find a record in mongodb
+Have you worked on JSON
+Data structures supported NodeJS
+How to drop collection in Mongo
+how to display list on front end
+What are arrays
+Can we access cookies in FE side ?
+What is cookies ?
+Explain your current project in brief
+What type of authentication you are using . Explain it ?
+Which type of cloud services you are using ?
+How can you connect cloud database to our project ?
+What is callback hell ?
+1.Node js event loop steps2. why Nodejs is called single threaded3.what is cors how it is implemented4.hot to implement indexing in database5 tell about the project and your role in it6.what is curring in js7.what id diff beteween splice and slice  with example8.write a code for providing a occurence of unique alphabets in a string?
+What is in-memory cache?
+Difference between ssr and csr?
+What is lazy-loading ?
+What is pagination ?
+What is SEO?
+redis implementation
+queue mechanism
+give detail information about SSR every little detail .
+how ssr work flow give me every pin detail from A-Z but in detail every small detail .
+how react work (detail information)
+give real time scaneario. of some project . give every signle detail of that.
+Use of Helmet packageKnowledge about AWSEvent LoopTypes of queue in Event loopPriority of queue in Event loopWrite a logic to find the occurrence of each unique elements.Input:  str = “acadbdbadc”Find number of consecutive one’s in an array = [0,1,0,1,0,1,1,1,1,0,1] (using reduce)git cherry-pickgit revertAbstract classdifference between abstract and interface
+Event loop
+aggregation and it's example
+usecallback vs useMemolocalstorage vs sessionstoragecookies vs session
+why we use context api, and explain useContext.explain reduxin which scenario you will use context API
+prototype container
+explain HOC
+logging related question as it was used inmy previous project. how you will perform using AWS service.
+create customm Promise.all(coding question they will give)
+explain promise, promise.all, promise.allsetteled
+how you will make pages responsible using HTML CSSexplain display property
+PWA, React Hook, explain lifecycle methods
+if we have product array, you want to apply10% or and random % discount on product thenhow you will perform using mongodb query
+how you will handle production api issues.var vs letlexical scope
+what is event queue?what is event loop?how does single thread work ?what is JWT token? explain its syntax.Lifecycle of Node.jsHow do you connect node JS with SQL.write a program to find sum of each column in a matrixwrite a program to calculate count of vowels present in string
+How you perform database operations from node.jsLifecycle of Node.jsasync , await PromisesWrite code for palindrome numberPromise examplesocket in node.jshow to send message to frontend without API call, after completion of task
+what is the difference between functional based component and class based component?
+while using async  why we use await
+what is collection?
+sequalize data and non-sequalize data
+what is the monolithic and microservice architecture?
+how can we perform multithreading in nodejs
+API Gateway in AWS
+How to handle concurrent request
+Implementation of Graph QL API
+ORM, ODM (Type ORM, Mongoose, Sequelize)
+1) all the question are related to the past experiences. 2) how you are using the shared databases .3) what are the problem you are facing in the project over your career . 4) sharding give a real time problem for mongodb.5) give multiple problem related to the memory leakage realtime .
+sql queries
+about how i manages the voucher unique creation
+realdom and virtual dom
+life cycle of react
+Do images get rendered on the server in SSR with Next.js?
+Writing LRU (Least Recently Used) cache code is like implementing a basic cache system like redis
+Could you please provide more details about your career path and the challenging tasks you've encountered and enjoyed solving? This will help me provide a more specific response.
+If you have multiple graphs causing memory leaks, how do you handle that, and what approach do you follow?
+Why do we need Next.js over React.js?
+What is SSR, and why is it recommended?
+How does Node.js identify how tasks should move in the event queue?
+I was part of Mazad fixed cost project. Project is over but client has selected 4 developers from our team on resource basis. So actually I have not given any interview for this.
+What is event queueDifference between Shallow copy and Deep copyWhy we are using aync/awaitWhat is Generator functionCode base on reverse string
+Relation between Typescript and Nest jsWhat is module in nest jswhat are services use in nestRouting in nest jsAuthentication /Authorization
+Explain your projects
+At what position do you want to see yourself in future?
+What are the domains you've worked with?I mentioned Flutter, Firebase and NodeJS here
+I explained my 2nd project and client asked questions related to projects What technologies did you use?What authentication method did you use?How user data like name, age, race, nationality, audio verification was managed and stored to db.Process of account creation and activation. Who would verify and activate account and how?Socket.io - What are the difficulties you've faced while implementation of socket in Flutter?
+I explained one of my project and client asked questions related to projects Explain functionalities of the app?What authentication method did you use?Club check-in and check-out was managed by QR scanning (IOT). So what did you used on Flutter side to manage Scanning of QR code?How did you make it secure or Did you use JWT authentication in that API?
+Introduction
+What are your hobbies?
+Feature of ES6 in JavaScript
+What is difference between Nodejs and other programming language.
+What is JWT and uses
+What is call stack in js.
+What is Nodejs
+What is radis
+Difference between var, let, const
+Write a program to find the element which is not from 1 to 10 and replace this number from zero.var arr = [6,1,8,0,4,5,3,7,2,10]
+What is lexical scope
+How many type of error in nodejs
+How to check user is authorized
+what is event loop.
+JavascriptWhat is Javascript?waht is Scope?what is pure function?Difference between normal function,arrow function and anonymous function.waht is callback,promise and async await ?what is callback hell ?what is higher order function ?when to use  map,filter,reducewhat is closure?waht is lexicalScopeNode jsWhat is Node Js?waht is Middleware and its functional uses?waht is jwt and which library used?Databasewhat is the difference between relational db and non-relational db?waht is index and its uses?
+8. Difference between process.nextTick() and setImmediate() Methods?
+Spawn and worker process , Multithreading in Nodejs
+What is Package.json file?
+Question about payment gateway
+. Wha is Promise?
+usage of promise.all() and async and await
+What is Piping in Node.js ?
+What is Middleware?
+. what is callback and How callback Works?
+1. Why we use Node js?
+. what is async await in Node Js?
+. How Node js Works?
+explain the Virtual DOM concept in React.?
+explain how would you optimize you application performance in React by using which hook?
+WAP to search for the countries name.
+online coding (machine test)
+explain the life cycle methods in React.?
+WAP to sum the elements in the array.
+explain the flow of the redux in Details.?
+what is React?
+explain the Hooks in React?
+various question from typescript.
+questions asked related to past projects. (technical based)
+Need of using queue service like bull mq,explain how you implemented in your project
+different type of headers,give examples
+Enable cookie in nodejs & how to access cookie after enabling
+Describe Messaging services working like Rabbit MQ ,Bull MQ
+Docker image vs container,use case for docker usecase
+describe about XSS protection header
+protocol followed in web socket and in HTTP,HTTPS
+Difference between MongoDB and MySQL ?

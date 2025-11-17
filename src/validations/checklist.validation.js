@@ -1,19 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
-// name, description, questions, orderId
-/**
- * Validations for checklist:
- * - name: required string
- * - description: optional string
- * - questions: required non-empty array of question objects
- *    - questions.*.text: required string
- *    - questions.*.type: optional enum
- *    - questions.*.options: optional non-empty array of non-empty strings (for choice types)
- *    - questions.*.required: optional boolean
- * - orderId: optional integer (non-negative)
- */
-
-const checklistValidationRules = () => [
+exports.checklistValidationRules = [
     body('name')
         .exists({ checkFalsy: true }).withMessage('name is required')
         .isString().withMessage('name must be a string')
@@ -28,7 +15,7 @@ const checklistValidationRules = () => [
         .exists({ checkFalsy: true }).withMessage('questions is required')
         .isArray({ min: 1 }).withMessage('questions must be a non-empty array'),
 
-    body('questions.*.text')
+    body('questions.*.questionText')
         .exists({ checkFalsy: true }).withMessage('question text is required')
         .isString().withMessage('question text must be a string')
         .isLength({ min: 1 }).withMessage('question text cannot be empty'),
@@ -53,14 +40,3 @@ const checklistValidationRules = () => [
         .optional({ nullable: true })
         .isInt({ min: 0 }).withMessage('orderId must be a non-negative integer'),
 ];
-
-const validateChecklist = (req, res, next) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) return next();
-    return res.status(400).json({ errors: errors.array() });
-};
-
-module.exports = {
-    checklistValidationRules,
-    validateChecklist,
-};

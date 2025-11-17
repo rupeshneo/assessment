@@ -15,20 +15,17 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
-      },
-      isDefault: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        allowNull: true,
       },
       createdById: {
         type: Sequelize.INTEGER,
         references: { model: "users", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       orderId: {
         type: Sequelize.INTEGER,
         references: { model: "orders", key: "id" },
-        onDelete: "SET NULL",
+        onDelete: "NO ACTION",
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +33,10 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

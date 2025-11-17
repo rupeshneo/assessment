@@ -1,33 +1,62 @@
 "use strict";
-const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Answer extends Model {
-    static associate(models) {
-      Answer.belongsTo(models.User, {
-        as: "inspectionManager",
-        foreignKey: "inspectionManagerId",
-      });
-      Answer.belongsTo(models.Order, { foreignKey: "orderId", as: "order" });
-      Answer.belongsTo(models.Checklist, {
-        foreignKey: "checklistId",
-        as: "checklist",
-      });
-      Answer.hasMany(models.FileUpload, {
-        foreignKey: "answerId",
-        as: "fileUploads",
-      });
-    }
-  }
-
-  Answer.init(
+  const Answer = sequelize.define(
+    "Answer",
     {
-      answers: { type: DataTypes.JSON, allowNull: true },
-      files: { type: DataTypes.JSON, allowNull: true },
-      submittedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+      answers: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: {},
+      },
+      submittedAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      inspectionManagerId: {
+        type: DataTypes.INTEGER,
+      },
+      orderId: {
+        type: DataTypes.INTEGER,
+      },
+      checklistId: {
+        type: DataTypes.INTEGER,
+      },
     },
-    { sequelize, modelName: "Answer", tableName: "answers" }
+    {
+      tableName: "answers",
+      paranoid: true,
+    }
   );
+
+  // Associations
+  Answer.associate = (models) => {
+    Answer.belongsTo(models.User, {
+      as: "inspectionManager",
+      foreignKey: "inspectionManagerId",
+    });
+
+    Answer.belongsTo(models.Order, {
+      as: "order",
+      foreignKey: "orderId",
+    });
+
+    Answer.belongsTo(models.Checklist, {
+      as: "checklist",
+      foreignKey: "checklistId",
+    });
+
+    Answer.hasMany(models.FileUpload, {
+      as: "fileUploads",
+      foreignKey: "answerId",
+    });
+
+    Answer.hasMany(models.ChecklistQuestion, {
+      as: "questions",
+      foreignKey: "checklistId",
+      sourceKey: "checklistId",
+    });
+  };
 
   return Answer;
 };
