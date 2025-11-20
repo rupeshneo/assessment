@@ -66,7 +66,7 @@ module.exports = router;
  * @swagger
  * /orders/{id}:
  *   get:
- *     summary: Get order by ID
+ *     summary: Get order by ID (All)
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -86,7 +86,7 @@ module.exports = router;
  * @swagger
  * /orders/{id}/status:
  *   put:
- *     summary: Update order status (Admin, Procurement, Inspection)
+ *     summary: Update order status ( Procurement, Inspection)
  *     tags: [Orders]
  *     parameters:
  *       - in: path

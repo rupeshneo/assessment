@@ -83,10 +83,17 @@ module.exports = router;
 
 /**
  * @swagger
+ * tags:
+ *   name: Assign
+ *   description: API for user login and registration
+ */
+
+/**
+ * @swagger
  * /auth/assign-inspection-manager:
  *   post:
  *     summary: Assign Inspection Manager to Procurement Manager (Procurement only)
- *     tags: [Authentication]
+ *     tags: [Assign]
  *     requestBody:
  *       required: true
  *       content:

@@ -7,7 +7,7 @@ exports.updateOrderStatus = async (orderId, status) => {
     await order.update({ status: status });
     return { message: "Order status updated", order };
   } catch (error) {
-    logger.error("updateOrderStatus error:", error.stack);
+    logger.error(`updateOrderStatus error: ${error.stack}`, error.stack);
     return { error: error.message };
   }
 };

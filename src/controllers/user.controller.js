@@ -5,7 +5,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.findAll();
     res.json(users);
   } catch (error) {
-    logger.error("getAllUsers error:", error);
+    logger.error(`getAllUsers error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -16,7 +16,7 @@ exports.getUserById = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (error) {
-    logger.error("getUserById error:", error);
+    logger.error(`getUserById error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -30,7 +30,7 @@ exports.updateUser = async (req, res) => {
     await user.update({ name, phone, role, isActive });
     res.json({ message: "User updated successfully", user });
   } catch (error) {
-    logger.error("updateUser error:", error);
+    logger.error(`updateUser error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };

@@ -45,7 +45,7 @@ exports.createOrder = async (req, res) => {
 
     res.status(201).json({ message: "Order created", order });
   } catch (error) {
-    logger.error("createOrder error:", error);
+    logger.error(`createOrder error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -97,7 +97,7 @@ exports.getAllOrders = async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    logger.error("getAllOrders error:", error);
+    logger.error(`getAllOrders error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -135,7 +135,7 @@ exports.getOrderById = async (req, res) => {
     if (!order) return res.status(404).json({ message: "Order not found" });
     res.json(order);
   } catch (error) {
-    logger.error("getOrderById error:", error);
+    logger.error(`getOrderById error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -176,7 +176,7 @@ exports.orderStatusUpdate = async (req, res) => {
     res.json({ message });
   } catch (error) {
     if (transaction) await transaction.rollback();
-    logger.error("orderInspected error:", error);
+    logger.error(`orderInspected error: ${error.stack}`, error);
     res.status(500).json({ message: error.stack });
   }
 };

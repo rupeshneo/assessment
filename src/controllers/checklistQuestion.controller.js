@@ -8,7 +8,7 @@ exports.createQuestion = async (req, res) => {
     const question = await ChecklistQuestion.create(req.body);
     res.status(201).json(question);
   } catch (error) {
-    logger.error("createQuestion error:", error);
+    logger.error(`createQuestion error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -20,7 +20,7 @@ exports.updateQuestion = async (req, res) => {
     await question.update(req.body);
     res.json({ message: "Question updated", question });
   } catch (error) {
-    logger.error("updateQuestion error:", error);
+    logger.error(`updateQuestion error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -33,7 +33,7 @@ exports.deleteQuestion = async (req, res) => {
     await question.destroy();
     res.json({ message: "Question deleted" });
   } catch (error) {
-    logger.error("deleteQuestion error:", error);
+    logger.error(`deleteQuestion error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };

@@ -74,7 +74,7 @@ exports.createChecklist = async (req, res) => {
     return res.status(201).json({ message: "Checklist created", checklist });
   } catch (error) {
     if (t) await t.rollback();
-    logger.error("createChecklist error:", error);
+    logger.error(`createChecklist error: ${error.stack}`, error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -96,7 +96,7 @@ exports.getChecklist = async (req, res) => {
       return res.status(404).json({ message: "Checklist not found" });
     res.json(checklist);
   } catch (error) {
-    logger.error("getChecklist error:", error);
+    logger.error(`getChecklist error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };

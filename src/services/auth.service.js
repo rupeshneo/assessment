@@ -47,7 +47,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully", user });
   } catch (err) {
-    logger.error("Registration error:", err);
+    logger.error(`Registration error: ${error.stack}`, err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
 
     res.json({ message: "Login successful", token, user });
   } catch (error) {
-    logger.error("Login error:", error);
+    logger.error(`Login error: ${error.stack}`, error);
     res.status(500).json({ message: "Login error", error: error.message });
   }
 };
@@ -104,7 +104,7 @@ exports.assignInspectionManager = async (req, res) => {
       inspectionManager,
     });
   } catch (error) {
-    logger.error("assignInspectionManager error:", error);
+    logger.error(`assignInspectionManager error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };

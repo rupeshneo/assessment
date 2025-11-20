@@ -14,7 +14,7 @@ const { validationError } = require("../utils/response");
 exports.submitAnswer = async (req, res) => {
   let transaction;
   try {
-    const errors = validationResult(req);    
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return validationError(res, errors.array()[0].msg)
     }
@@ -31,6 +31,8 @@ exports.submitAnswer = async (req, res) => {
       questionIds.includes(r.questionId)
     );
     let answer = await Answer.findOne({ where: { orderId } });
+    let answerExist = 0;
+    if (answer) answerExist = 1;
     let fileUploads = [];
     if (answer) {
       fileUploads = await FileUpload.findAll({
@@ -66,7 +68,9 @@ exports.submitAnswer = async (req, res) => {
     // UPDATE ORDER STATUS TO in_progress
     await order.update({ status: "inspection_pending" }, { transaction });
 
-    answer.answers = JSON.parse(answer.answers);
+    if (answerExist) {
+      answer.answers = JSON.parse(answer.answers);
+    }
 
     // COMMIT TRANSACTION
     await transaction.commit();
@@ -78,7 +82,7 @@ exports.submitAnswer = async (req, res) => {
     });
   } catch (error) {
     if (transaction) await transaction.rollback();
-    deleteFiles(req);    
+    deleteFiles(req);
     logger.error(`submitAnswer error: ${error.stack}`, error);
     return res.status(500).json({ message: error.message, error: error.stack });
   }
@@ -92,7 +96,7 @@ exports.getAnswersByOrder = async (req, res) => {
     answer.answers = JSON.parse(answer.answers);
     res.json(answer);
   } catch (error) {
-    logger.error("getAnswersByOrder error:", error);
+    logger.error(`getAnswersByOrder error: ${error.stack}`, error);
     res.status(500).json({ message: error.message });
   }
 };

@@ -57,15 +57,15 @@ module.exports = router;
  * @swagger
  * /checklist-questions/{id}:
  *   put:
- *     summary: Update a checklist question (Procurement only)
+ *     summary: Update an existing checklist question (Procurement only)
  *     tags: [Checklist Questions]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
+ *         description: ID of the checklist question to update
  *         schema:
  *           type: integer
- *         required: true
- *         description: Checklist question ID
  *     requestBody:
  *       required: true
  *       content:
@@ -75,11 +75,25 @@ module.exports = router;
  *             properties:
  *               questionText:
  *                 type: string
- *                 example: Is the packaging intact and undamaged?
+ *                 example: Is the item properly sealed?
+ *               type:
+ *                 type: string
+ *                 enum: [text, radio, dropdown, textarea, number, checkbox, file, datetime, date]
+ *                 example: dropdown
+ *               required:
+ *                 type: boolean
+ *                 example: false
+ *               options:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Excellent", "Good", "Poor"]
  *     responses:
  *       200:
  *         description: Checklist question updated successfully
- */ 
+ *       404:
+ *         description: Checklist question not found
+ */
 
 
 /** * @swagger
