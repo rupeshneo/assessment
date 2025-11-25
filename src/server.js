@@ -5,9 +5,26 @@ const { sequelize } = require("./models");
 const PORT = process.env.PORT || 3000;
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("../swagger/swagger.config");
+const morgan = require("morgan");
+const fs = require('fs');
+const path = require('path');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
+
+if (process.env.NODE_ENV === 'development') {
+  const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    { flags: 'a' }
+  );
+  console.log(path.join(__dirname, 'access.log'));
+    
+  app.use(morgan('combined', { stream: accessLogStream }));
+}
 
 app.use("/uploads", express.static("uploads"));
 

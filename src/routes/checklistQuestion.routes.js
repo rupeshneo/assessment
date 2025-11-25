@@ -3,10 +3,11 @@ const router = express.Router();
 const questionController = require("../controllers/checklistQuestion.controller");
 const { authorizeRoles: roleAuth } = require("../middlewares/auth.middleware");
 const { authenticateUser: auth } = require("../middlewares/auth.middleware");
+const { PROC } = require('../config/config.json').role
 
-router.post("/", auth, roleAuth("procurement"), questionController.createQuestion);
-router.put("/:id", auth, roleAuth("procurement"), questionController.updateQuestion);
-router.delete("/:id", auth, roleAuth("procurement"), questionController.deleteQuestion);
+router.post("/", auth, roleAuth(PROC), questionController.createQuestion);
+router.put("/:id", auth, roleAuth(PROC), questionController.updateQuestion);
+router.delete("/:id", auth, roleAuth(PROC), questionController.deleteQuestion);
 
 module.exports = router;
 

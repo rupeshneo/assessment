@@ -16,7 +16,7 @@ exports.submitAnswer = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return validationError(res, errors.array()[0].msg)
+      return validationError(res, errors.array()[0].msg);
     }
 
     const { orderId, responses } = req.body;
@@ -92,6 +92,12 @@ exports.getAnswersByOrder = async (req, res) => {
   try {
     let answer = await Answer.findOne({
       where: { orderId: req.params.orderId },
+      attributes:["id","answers"],
+      include: [
+        {
+          association: "fileUploads"
+        }
+      ],
     });
     answer.answers = JSON.parse(answer.answers);
     res.json(answer);

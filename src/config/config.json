@@ -1,0 +1,8 @@
+{
+    "role": {
+        "ADMIN": "admin",
+        "PROC": "procurement",
+        "INSP": "inspection",
+        "CLNT": "client"
+    }
+}

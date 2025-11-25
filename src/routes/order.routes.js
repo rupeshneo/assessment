@@ -3,10 +3,11 @@ const router = express.Router();
 const orderController = require("../controllers/order.controller");
 const { authorizeRoles: roleAuth } = require("../middlewares/auth.middleware");
 const { authenticateUser: auth } = require("../middlewares/auth.middleware");
+const { PROC, INSP } = require('../config/config.json').role
 
-router.post("/", auth, roleAuth("procurement"), orderController.createOrder);
+router.post("/", auth, roleAuth(PROC), orderController.createOrder);
 router.get("/", auth, orderController.getAllOrders);
-router.put("/:id/status", auth, roleAuth( "procurement", "inspection"), orderController.orderStatusUpdate);
+router.put("/:id/status", auth, roleAuth( PROC, INSP ), orderController.orderStatusUpdate);
 router.get("/:id", auth, orderController.getOrderById);
 
 module.exports = router;

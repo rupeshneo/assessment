@@ -1,4 +1,5 @@
 "use strict";
+const config = require('../config/config.json');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -23,16 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        // Note: Sequelize doesn't support `hide: true`
-        // This is usually handled in serializer or response filtering.
       },
 
       role: {
         type: DataTypes.ENUM(
-          "admin",
-          "procurement",
-          "inspection",
-          "client"
+          config.role.ADMIN,
+          config.role.PROC,
+          config.role.INSP,
+          config.role.CLNT,
         ),
         allowNull: false,
       },

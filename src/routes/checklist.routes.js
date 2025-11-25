@@ -4,9 +4,10 @@ const checklistController = require("../controllers/checklist.controller");
 const { authorizeRoles: roleAuth } = require("../middlewares/auth.middleware");
 const { authenticateUser: auth } = require("../middlewares/auth.middleware");
 const { checklistValidationRules } = require("../validations/checklist.validation");
+const { PROC } = require('../config/config.json').role
 
 // Procurement Manager creates checklist
-router.post("/", auth, roleAuth("procurement"), checklistValidationRules, checklistController.createChecklist);
+router.post("/", auth, roleAuth( PROC ), checklistValidationRules, checklistController.createChecklist);
 
 // Anyone (with permission) can view checklist
 router.get("/:id", auth, checklistController.getChecklist);

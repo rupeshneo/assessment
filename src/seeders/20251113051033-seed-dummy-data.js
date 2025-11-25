@@ -1,5 +1,4 @@
 "use strict";
-const bcrypt = require("bcryptjs");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -7,10 +6,10 @@ module.exports = {
 
     await queryInterface.sequelize.query(
       "INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `createdBy`, `assign`, `role`, `isActive`, `createdAt`, `updatedAt`) VALUES \
-      (1,	'System Admin',	'admin@manage.com',	'9876543210',	'$2b$10$QEy2uXwdjg.UWqOKDP8nv.EWZAI10Q.1rPGP2XNiP2o93eG1TNsiK',	NULL,	NULL,	'admin',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20'), \
-      (2,	'System Admin',	'procurement@manage.com',	'9876543211',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'procurement',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20'), \
-      (3,	'System Admin',	'inspection@manage.com',	'9876543212',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'inspection',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20'), \
-      (4,	'Admin User',	'client@manage.com',	'9876543213',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'client',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
+      (1,	'System Admin',	'admin@manage.com',	'9876543210',	'$2b$10$QEy2uXwdjg.UWqOKDP8nv.EWZAI10Q.1rPGP2XNiP2o93eG1TNsiK',	NULL,	NULL,	'admin',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
+      // (2,	'System Admin',	'procurement@manage.com',	'9876543211',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'procurement',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20'), \
+      // (3,	'System Admin',	'inspection@manage.com',	'9876543212',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'inspection',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20'), \
+      // (4,	'Admin User',	'client@manage.com',	'9876543213',	'$2b$10$MOF1lq.WLAhBad7zAuHKjujipJ8ezjtS4UP0ktZ7ozdFDC1FirLqK',	1,	1,	'client',	1,	'2025-11-14 12:24:20',	'2025-11-14 12:24:20');"
     );
 
     // await queryInterface.sequelize.query(

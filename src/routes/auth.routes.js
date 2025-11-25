@@ -3,9 +3,10 @@ const router = express.Router();
 const authController = require('../controllers/auth.controller');
 const { createUserValidation } = require('../validations/auth.validation');
 const { authenticateUser, authorizeRoles } = require('../middlewares/auth.middleware');
+const { ADMIN, PROC, INSP } = require('../config/config.json').role
 
 router.post('/login', authController.login);
-router.post('/register', authenticateUser, authorizeRoles('admin', 'procurement', 'inspection'), createUserValidation, authController.register);
+router.post('/register', authenticateUser, authorizeRoles( ADMIN, PROC, INSP ), createUserValidation, authController.register);
 router.post('/assign-inspection-manager', authenticateUser, authorizeRoles('admin'), authController.assignInspectionManager);
 
 module.exports = router;
@@ -32,18 +33,19 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
- *                 example: John Doe
+ *                 example: Procurement Manager
  *               email:
  *                 type: string
- *                 example: john@example.com
+ *                 example: procurement@manage.com
  *               phone:   
  *                 type: string
- *                 example: "1234567890"
+ *                 example: "9876543210"
  *               password:
  *                 type: string
  *                 example: "Admin@123"
  *               role:
  *                 type: string
+ *                 example: "procurement"
  *                 enum: [admin, procurement, inspection, client]
  *     responses:
  *       201:
@@ -58,7 +60,7 @@ module.exports = router;
  *   post:
  *     summary: Login user and get JWT token
  *     tags: [Authentication]
- *     security: []        # 👈 disables auth for this route
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -78,7 +80,7 @@ module.exports = router;
  *       404:
  *         description: User not found
  *       400:
- *         description: Invalid password
+ *         description: Invalid credentials
  */
 
 /**
