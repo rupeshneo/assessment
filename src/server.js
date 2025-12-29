@@ -8,6 +8,7 @@ const swaggerSpec = require("../swagger/swagger.config");
 const morgan = require("morgan");
 const fs = require('fs');
 const path = require('path');
+const { sendMail } = require("./helpers/helper");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,6 +39,12 @@ app.use("/api/checklists", require("./routes/checklist.routes"));
 app.use("/api/checklist-questions", require("./routes/checklistQuestion.routes"));
 app.use("/api/answers", require("./routes/answer.routes"));
 
+app.post('/mail', function (req,res) {
+  sendMail();
+  return res.json({
+    done: true
+  })
+})
 app.use((req, res, next) => {
   res.status(404).json({
     message: "Route not found",

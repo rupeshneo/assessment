@@ -1,257 +1,330 @@
-const { validationResult } = require("express-validator");
-const { deleteFiles, deleteFilesByPaths } = require("../helpers/helper");
-const {
-  Answer,
-  Checklist,
-  ChecklistQuestion,
-  FileUpload,
-  Order,
-  sequelize,
-} = require("../models");
-const logger = require("../utils/logger");
-const { validationError } = require("../utils/response");
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
+import { Answer } from './entities/answer.entity';
+import { Checklist } from './entities/checklist.entity';
+import { ChecklistQuestion } from './entities/checklist-question.entity';
+import { FileUpload } from './entities/file-upload.entity';
+import { Order } from '../order/entities/order.entity';
+import { deleteFiles, deleteFilesByPaths } from '../helpers/helper';
 
-exports.submitAnswer = async (req, res) => {
-  let transaction;
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return validationError(res, errors.array()[0].msg);
-    }
+@Injectable()
+export class AnswersService {
+  // private readonly logger = new Logger(AnswersService.name);
 
-    const { orderId, responses } = req.body;
-    const parsedResponses = JSON.parse(responses || "[]");
-    const order = await Order.findOne({ where: { id: orderId } });
-    const checklist = await Checklist.findOne({
-      where: { orderId },
-      include: [{ model: ChecklistQuestion, as: "questions" }],
-    });
-    const questionIds = checklist.questions.map((q) => q.id);
-    const validResponses = parsedResponses.filter((r) =>
-      questionIds.includes(r.questionId)
-    );
-    let answer = await Answer.findOne({ where: { orderId } });
-    let answerExist = 0;
-    if (answer) answerExist = 1;
-    let fileUploads = [];
-    if (answer) {
-      fileUploads = await FileUpload.findAll({
-        where: { answerId: answer.id },
+  constructor(
+    private readonly dataSource: DataSource,
+
+    @InjectRepository(Answer)
+    private readonly answerRepo: Repository<Answer>,
+
+    @InjectRepository(Checklist)
+    private readonly checklistRepo: Repository<Checklist>,
+
+    @InjectRepository(ChecklistQuestion)
+    private readonly questionRepo: Repository<ChecklistQuestion>,
+
+    @InjectRepository(FileUpload)
+    private readonly fileRepo: Repository<FileUpload>,
+
+    @InjectRepository(Order)
+    private readonly orderRepo: Repository<Order>,
+  ) {}
+
+  /* ========================= SUBMIT ANSWERS ========================= */
+
+  async submitAnswer(
+    body: any,
+    files: Express.Multer.File[],
+    user: any,
+  ) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const { orderId, responses } = body;
+      const parsedResponses = JSON.parse(responses || '[]');
+
+      const order = await this.orderRepo.findOne({
+        where: { id: orderId },
       });
-    }
-    if (!order) {
-      return res.status(400).json({ message: "Invalid orderId" });
-    }
 
-    if (!checklist || !checklist.questions?.length) {
-      return res.status(400).json({ message: "Checklist not found" });
-    }
-
-    validaton(checklist, validResponses, fileUploads, req);
-
-    // TRANSACTION START
-    transaction = await sequelize.transaction();
-
-    // Save Answer
-    answer = await saveAnswer(
-      answer,
-      validResponses,
-      transaction,
-      checklist,
-      req,
-      orderId
-    );
-
-    // SAVE FILES IN fileUploads TABLE
-    await saveFiles(answer.id, req, transaction, fileUploads, checklist);
-
-    // UPDATE ORDER STATUS TO in_progress
-    await order.update({ status: "inspection_pending" }, { transaction });
-
-    if (answerExist) {
-      answer.answers = JSON.parse(answer.answers);
-    }
-
-    // COMMIT TRANSACTION
-    await transaction.commit();
-
-    return res.status(201).json({
-      message: "Checklist answers & files submitted successfully",
-      answer,
-      files: await FileUpload.findAll({ where: { answerId: answer.id } }),
-    });
-  } catch (error) {
-    if (transaction) await transaction.rollback();
-    deleteFiles(req);
-    logger.error(`submitAnswer error: ${error.stack}`, error);
-    return res.status(500).json({ message: error.message, error: error.stack });
-  }
-};
-
-exports.getAnswersByOrder = async (req, res) => {
-  try {
-    let answer = await Answer.findOne({
-      where: { orderId: req.params.orderId },
-      attributes:["id","answers"],
-      include: [
-        {
-          association: "fileUploads"
-        }
-      ],
-    });
-    answer.answers = JSON.parse(answer.answers);
-    res.json(answer);
-  } catch (error) {
-    logger.error(`getAnswersByOrder error: ${error.stack}`, error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-const validaton = (checklist, validResponses, fileUploads, req) => {
-  // VALIDATION LOOP
-  for (const question of checklist.questions) {
-    const userResponse = validResponses.find(
-      (resp) => resp.questionId === question.id
-    );
-
-    const options = question.options
-      ? question.options.map((o) => o.trim())
-      : [];
-    const answerArr = userResponse?.answers
-      ? userResponse.answers.split(",").map((a) => a.trim())
-      : [];
-
-    // Required validations
-    if (question.required) {
-      if (!userResponse?.answers && question.type !== "file") {
-        throw new Error(`Answer required for question ${question.id}`);
+      if (!order) {
+        throw new BadRequestException('Invalid orderId');
       }
 
-      if (question.type === "file") {
-        if (!fileUploads.find((f) => f.questionId === question.id)) {
-          const filePresent = req.files?.some(
-            (f) => f.fieldname === `question_${question.id}`
+      const checklist = await this.checklistRepo.findOne({
+        where: { orderId },
+        relations: ['questions'],
+      });
+
+      if (!checklist || !checklist.questions.length) {
+        throw new BadRequestException('Checklist not found');
+      }
+
+      const questionIds = checklist.questions.map((q) => q.id);
+      const validResponses = parsedResponses.filter((r) =>
+        questionIds.includes(r.questionId),
+      );
+
+      let answer = await this.answerRepo.findOne({
+        where: { orderId },
+      });
+
+      let existingFiles: FileUpload[] = [];
+
+      if (answer) {
+        existingFiles = await this.fileRepo.find({
+          where: { answerId: answer.id },
+        });
+      }
+
+      this.validateResponses(
+        checklist,
+        validResponses,
+        existingFiles,
+        files,
+      );
+
+      // SAVE ANSWER
+      answer = await this.saveAnswer(
+        answer,
+        validResponses,
+        checklist.id,
+        orderId,
+        user.id,
+        queryRunner,
+      );
+
+      // SAVE FILES
+      await this.saveFiles(
+        answer.id,
+        files,
+        existingFiles,
+        checklist,
+        queryRunner,
+      );
+
+      // UPDATE ORDER STATUS
+      await queryRunner.manager.update(
+        Order,
+        { id: orderId },
+        { status: 'inspection_pending' },
+      );
+
+      await queryRunner.commitTransaction();
+
+      return {
+        message: 'Checklist answers & files submitted successfully',
+        answer: {
+          ...answer,
+          answers: JSON.parse(answer.answers),
+        },
+        files: await this.fileRepo.find({
+          where: { answerId: answer.id },
+        }),
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      deleteFiles({ files });
+      this.logger.error(error.stack);
+      throw new InternalServerErrorException(error.message);
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  /* ========================= GET ANSWERS ========================= */
+
+  async getAnswersByOrder(orderId: number) {
+    const answer = await this.answerRepo.findOne({
+      where: { orderId },
+      relations: ['fileUploads'],
+      select: {
+        id: true,
+        answers: true,
+      },
+    });
+
+    if (!answer) return null;
+
+    return {
+      ...answer,
+      answers: JSON.parse(answer.answers),
+    };
+  }
+
+  /* ========================= VALIDATION ========================= */
+
+  private validateResponses(
+    checklist: Checklist,
+    responses: any[],
+    fileUploads: FileUpload[],
+    files: Express.Multer.File[],
+  ) {
+    for (const question of checklist.questions) {
+      const response = responses.find(
+        (r) => r.questionId === question.id,
+      );
+
+      const options = question.options?.map((o) => o.trim()) || [];
+      const answers = response?.answers
+        ? response.answers.split(',').map((a) => a.trim())
+        : [];
+
+      // REQUIRED
+      if (question.required) {
+        if (!response?.answers && question.type !== 'file') {
+          throw new BadRequestException(
+            `Answer required for question ${question.id}`,
           );
-          if (!filePresent) {
-            throw new Error(`File required for question ${question.id}`);
-          }
         }
-      }
-    }
 
-    // Type validatons
-    switch (question.type) {
-      case "radio":
-      case "checkbox":
-      case "dropdown":
-        for (const ans of answerArr) {
-          if (!options.includes(ans)) {
-            throw new Error(
-              `Invalid option "${ans}" for question ${question.id}`
+        if (question.type === 'file') {
+          const exists =
+            fileUploads.find((f) => f.questionId === question.id) ||
+            files?.some(
+              (f) => f.fieldname === `question_${question.id}`,
+            );
+
+          if (!exists) {
+            throw new BadRequestException(
+              `File required for question ${question.id}`,
             );
           }
         }
-        break;
+      }
 
-      case "number":
-        if (answerArr[0] && isNaN(answerArr[0])) {
-          throw new Error(`Expected number for question ${question.id}`);
-        }
-        break;
+      // TYPE VALIDATION
+      switch (question.type) {
+        case 'radio':
+        case 'checkbox':
+        case 'dropdown':
+          for (const ans of answers) {
+            if (!options.includes(ans)) {
+              throw new BadRequestException(
+                `Invalid option "${ans}" for question ${question.id}`,
+              );
+            }
+          }
+          break;
 
-      case "date":
-      case "datetime":
-        if (answerArr[0] && isNaN(Date.parse(answerArr[0]))) {
-          throw new Error(`Invalid date for question ${question.id}`);
-        }
-        break;
+        case 'number':
+          if (answers[0] && isNaN(Number(answers[0]))) {
+            throw new BadRequestException(
+              `Expected number for question ${question.id}`,
+            );
+          }
+          break;
 
-      default:
-        break;
+        case 'date':
+        case 'datetime':
+          if (answers[0] && isNaN(Date.parse(answers[0]))) {
+            throw new BadRequestException(
+              `Invalid date for question ${question.id}`,
+            );
+          }
+          break;
+      }
     }
   }
-};
 
-const saveAnswer = async (
-  answer,
-  validResponses,
-  transaction,
-  checklist,
-  req,
-  orderId
-) => {
-  if (answer) {
-    await Answer.update(
-      {
-        answers: validResponses,
-      },
-      { where: { orderId }, transaction }
-    );
-    answer = await Answer.findOne({
-      where: { id: answer.id },
-      transaction,
-    });
-  } else {
-    answer = await Answer.create(
-      {
-        orderId,
-        checklistId: checklist.id,
-        inspectionManagerId: req.user.id,
-        answers: validResponses,
-      },
-      { transaction }
-    );
-  }
-  return answer;
-};
+  /* ========================= SAVE ANSWER ========================= */
 
-const saveFiles = async (
-  answerId,
-  req,
-  transaction,
-  fileUploads,
-  checklist
-) => {
-  if (req.files && req.files.length > 0) {
-    let filesToUpload = [];
-    let filesToUpdate = [];
-    let deletFilePaths = [];
-    req.files.forEach((file) => {
-      const questionId = file.fieldname.split("_")[1];
-
-      const fileExists = fileUploads.find(
-        (f) => questionId == Number(questionId) && answerId == Number(answerId)
+  private async saveAnswer(
+    answer: Answer | null,
+    responses: any[],
+    checklistId: number,
+    orderId: number,
+    userId: number,
+    queryRunner,
+  ): Promise<Answer> {
+    if (answer) {
+      await queryRunner.manager.update(
+        Answer,
+        { orderId },
+        { answers: JSON.stringify(responses) },
       );
 
-      if (fileExists) {
-        deletFilePaths.push(fileExists.filePath);
-        filesToUpdate.push({
-          id: fileExists.id,
+      return queryRunner.manager.findOneBy(Answer, {
+        id: answer.id,
+      });
+    }
+
+    const newAnswer = this.answerRepo.create({
+      orderId,
+      checklistId,
+      inspectionManagerId: userId,
+      answers: JSON.stringify(responses),
+    });
+
+    return queryRunner.manager.save(newAnswer);
+  }
+
+  /* ========================= SAVE FILES ========================= */
+
+  private async saveFiles(
+    answerId: number,
+    files: Express.Multer.File[],
+    existingFiles: FileUpload[],
+    checklist: Checklist,
+    queryRunner,
+  ) {
+    if (!files?.length) return;
+
+    const toCreate: FileUpload[] = [];
+    const toUpdate: { id: number; filePath: string }[] = [];
+    const deletePaths: string[] = [];
+
+    for (const file of files) {
+      const questionId = Number(file.fieldname.split('_')[1]);
+
+      const existing = existingFiles.find(
+        (f) => f.questionId === questionId,
+      );
+
+      if (existing) {
+        deletePaths.push(existing.filePath);
+        toUpdate.push({
+          id: existing.id,
           filePath: file.path,
         });
-        return;
+        continue;
       }
+
       if (
-        checklist.questions.find(
-          (q) => q.id === Number(questionId) && q.type === "file"
+        checklist.questions.some(
+          (q) => q.id === questionId && q.type === 'file',
         )
       ) {
-        filesToUpload.push({
-          fileName: file.filename,
-          filePath: file.path,
-          questionId: Number(questionId),
-          answerId: answerId,
-        });
+        toCreate.push(
+          this.fileRepo.create({
+            fileName: file.filename,
+            filePath: file.path,
+            questionId,
+            answerId,
+          }),
+        );
       }
-    });
+    }
 
-    await FileUpload.bulkCreate(filesToUpload, { transaction });
-    for (const fileData of filesToUpdate) {
-      await FileUpload.update(
-        { filePath: fileData.filePath },
-        { where: { id: fileData.id }, transaction }
+    if (toCreate.length) {
+      await queryRunner.manager.save(toCreate);
+    }
+
+    for (const f of toUpdate) {
+      await queryRunner.manager.update(
+        FileUpload,
+        { id: f.id },
+        { filePath: f.filePath },
       );
     }
-    deleteFilesByPaths(deletFilePaths);
+
+    deleteFilesByPaths(deletePaths);
   }
-};
+}
